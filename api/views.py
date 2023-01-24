@@ -1,30 +1,13 @@
-from django.shortcuts import render
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
 
 from authentication.models import CustomUser
-from authentication.serializers import RegistrationSerializer
+from authentication.serializers import RegisterUserSerializer
 
 
-class CustomUserViewSet(viewsets.ViewSet):
+class RegisterUserView(CreateAPIView):
     """
-    A viewset to handle user creation and authentication.
+    Endpoint for registering a new user.
     """
+
     queryset = CustomUser.objects.all()
-    
-    def list(self, request):
-        serializer = RegistrationSerializer(self.queryset, many=True)
-        return Response(serializer.data)
-    
-    
-    def create(self, request):
-        serializer = RegistrationSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.create(serializer.validated_data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-    
+    serializer_class = RegisterUserSerializer

@@ -1,9 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import CustomUserViewSet
+from .views import RegisterUserView
 
 router = routers.DefaultRouter()
-router.register(r"users", CustomUserViewSet)
 
-urlpatterns = router.urls
+
+urlpatterns = [
+    path("register/", RegisterUserView.as_view(), name="register"),
+]
+
+urlpatterns += router.urls

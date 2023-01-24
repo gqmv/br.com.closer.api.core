@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import CustomUser
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class RegisterUserSerializer(serializers.ModelSerializer):
     """
     Serializer for registering a new user.
     """
@@ -18,4 +18,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "last_name",
             "password",
         )
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {
+            "password": {"write_only": True, "style": {"input_type": "password"}},
+        }
