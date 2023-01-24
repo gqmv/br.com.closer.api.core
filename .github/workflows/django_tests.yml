@@ -1,4 +1,4 @@
-name: Django CI
+name: Django Tests
 
 on:
   push:
@@ -8,12 +8,15 @@ on:
 
 jobs:
   build:
-
+    env:
+      ENVIRONMENT: local
+      SECRET_KEY: foo
+    
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.9, 3.11]
+        python-version: [3.11]
 
     steps:
     - uses: actions/checkout@v3
