@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "cpf_field",
     "authentication",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -113,3 +114,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "authentication.CustomUser"
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
