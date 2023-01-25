@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, PermissionsMixin, UserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 
@@ -7,7 +7,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from cpf_field.models import CPFField
 
 
-class CustomUserManager(UserManager):
+class CustomUserManager(BaseUserManager):
     def _create_user(
         self,
         tax_id,
@@ -76,10 +76,10 @@ class CustomUserManager(UserManager):
         )
 
 
-class CustomUser(AbstractUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     tax_id = CPFField("CPF", blank=False, unique=True)
     email = models.EmailField(_("email address"), blank=False, unique=True)
-    phone_number = PhoneNumberField(null=False, blank=False, unique=True)
+    phone_number = PhoneNumberField(null=False, blank=False, unique=True, region="BR")
     first_name = models.CharField(_("first name"), max_length=20, blank=False)
     last_name = models.CharField(_("last name"), max_length=20, blank=False)
     is_active = models.BooleanField(default=True)
