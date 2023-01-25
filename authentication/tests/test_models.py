@@ -15,22 +15,23 @@ PASSWORD = "123456"
 
 class CustomUserModelManagerTests(TestCase):
     def test_create_user(self):
+        mock = MOCK_USER_DATA.copy()
         User = get_user_model()
-        user = User.objects.create_user(**MOCK_USER_DATA, password=PASSWORD)
-        self.assertDictContainsSubset(MOCK_USER_DATA, user.__dict__)
-        self.assertNotEqual(user.password, PASSWORD) # password is hashed
+        user = User.objects.create_user(**mock, password=PASSWORD)
+        self.assertDictContainsSubset(mock, user.__dict__)
+        self.assertNotEqual(user.password, PASSWORD)  # password is hashed
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
 
-        with self.assertRaises(TypeError):
-            User.objects.create_user(**MOCK_USER_DATA, tax_id=None)
-            
+        mock["tax_id"] = None
+        with self.assertRaises(TypeError, msg="Users must have a tax_id."):
+            User.objects.create_user(**mock)
 
     def test_create_superuser(self):
         User = get_user_model()
         admin_user = User.objects.create_superuser(**MOCK_USER_DATA, password=PASSWORD)
         self.assertDictContainsSubset(MOCK_USER_DATA, admin_user.__dict__)
-        self.assertNotEqual(admin_user.password, PASSWORD) # password is hashed
+        self.assertNotEqual(admin_user.password, PASSWORD)  # password is hashed
         self.assertTrue(admin_user.is_staff)
         self.assertTrue(admin_user.is_superuser)
 

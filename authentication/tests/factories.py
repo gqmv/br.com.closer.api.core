@@ -11,7 +11,7 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
         superuser = factory.Trait(is_superuser=True, is_staff=True)
 
     tax_id = factory.Faker("cpf", locale="pt_BR")
-    phone_number = factory.Faker("phone_number")
+    phone_number = factory.sequence(lambda n: f"+55819{n:08d}")
     email = factory.Faker("email")
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
