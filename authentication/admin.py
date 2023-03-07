@@ -3,13 +3,13 @@ from .models import CustomUser
 
 
 class CustomUserAdminConfig(admin.ModelAdmin):
-    ordering = ("first_name", "last_name", "tax_id")
-    list_display = ("first_name", "last_name", "tax_id", "email", "phone_number")
+    ordering = ("first_name",  "tax_id")
+    list_display = ("first_name",  "tax_id", "phone_number")
     list_filter = ("is_staff", "is_superuser")
-    search_fields = ("first_name", "last_name", "tax_id", "email", "phone_number")
+    search_fields = ("first_name",  "tax_id",  "phone_number")
     
     fieldsets = (
-        (None, {"fields": ("first_name", "last_name", "tax_id", "email", "phone_number")}),
+        (None, {"fields": ("first_name", "tax_id",  "phone_number")}),
         ("Permissions", {"fields": ("is_staff", "is_superuser")}),
     )
     
