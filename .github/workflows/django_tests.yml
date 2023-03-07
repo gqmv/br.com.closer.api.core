@@ -35,7 +35,7 @@ jobs:
 
     - name: Test
       run: |
-        coverage run --omit='*/./*' manage.py test
+        coverage run --omit='*/./*' -m pytest
         coverage xml
 
     - name: Code Coverage Report
