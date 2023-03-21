@@ -2,18 +2,11 @@ import os
 from heyoo import WhatsApp
 
 from authentication.models import CustomUser
-from stores.models import CampaignUser, Store
+from stores.models import CampaignUser, Store, BaseCampaign, RegularCampaign
 
 """
 The contents of this file are definitely not ideal and should be refactored soon.
 """
-
-
-def generate_coupon(store: Store, reward_id: int, reward_qty: int) -> str:
-    """
-    This function is responsible for generating a coupon code for a given store, reward id and reward quantity.
-    """
-    return "XXX-YYY-ZZZ"
 
 
 class ComponentsBuilder:
@@ -37,6 +30,28 @@ class ComponentsBuilder:
         """
         self.components[0]["parameters"].append({"type": "text", "text": text})
 
+    def add_user_info(self, user: CustomUser):
+        """
+        Adds the user information to the components.
+        """
+        self.add_text(user.first_name)
+
+    def add_reward_info(self, campaign: BaseCampaign):
+        """
+        Adds the reward information to the components.
+        """
+        self.add_text(campaign.reward_qty)
+        self.add_text(campaign.reward_name)
+        self.add_text(campaign.store.name)
+
+    def add_regular_campaign_info(self, campaign: RegularCampaign):
+        """
+        Adds information about a regular campaign to the components.
+        """
+        self.add_text(campaign.item_qty)
+        self.add_text(campaign.item_name)
+        self.add_reward_info(campaign)
+
     def build(self) -> list[dict]:
         """
         Returns the components.
@@ -44,121 +59,88 @@ class ComponentsBuilder:
         return self.components
 
 
-def welcome_message(user: CustomUser, store: Store):
-    """
-    Sends a welcome message to the user with the information about the reward associated with the store.
-    """
-    if store.welcomecampaign is None:
-        return
+class WhatsAppService:
+    def __init__(self):
+        self.messenger = WhatsApp(
+            os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
+        )
 
-    messenger = WhatsApp(
-        os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
-    )
+    def send_template(
+        self, template: str, recipient: CustomUser, components: list[dict]
+    ):
+        """
+        Sends a template message to the user.
+        """
+        user_number_id = str(recipient.phone_number).replace("+", "")
+        self.messenger.send_template(
+            template=template,
+            recipient_id=user_number_id,
+            lang=os.environ.get("WHATSAPP_LANG"),
+            components=components,
+        )
 
-    componentsBuilder = ComponentsBuilder()
-    componentsBuilder.add_text(user.first_name)
-    componentsBuilder.add_text(store.welcomecampaign.reward_qty)
-    componentsBuilder.add_text(store.welcomecampaign.reward_name)
-    componentsBuilder.add_text(store.name)
-    componentsBuilder.add_text("XXX-YYY-ZZZ")
+    def send_welcome_message(self, user: CustomUser):
+        """
+        Sends a welcome message to the user.
+        """
+        componentsBuilder = ComponentsBuilder()
+        componentsBuilder.add_user_info(user)
 
-    components = componentsBuilder.build()
+        components = componentsBuilder.build()
 
-    user_number_id = str(user.phone_number).replace("+", "")
-    messenger.send_template(
-        template="welcome_message",
-        recipient_id=user_number_id,
-        lang=os.environ.get("WHATSAPP_LANG"),
-        components=components,
-    )
+        self.send_template(
+            template="welcome_message",
+            recipient=user,
+            components=components,
+        )
 
+    def send_coupon_message(
+        self, user: CustomUser, campaign: BaseCampaign, coupon: str
+    ):
+        """
+        Sends a message to the user with the coupon code and the information about the campaign associated with the coupon.
+        """
+        componentsBuilder = ComponentsBuilder()
+        componentsBuilder.add_reward_info(campaign)
+        componentsBuilder.add_text(coupon)
 
-def notify_coupon(user: CustomUser, coupon: str, campaign: CampaignUser):
-    """
-    Sends a message to the user with the coupon code and the information about the campaign associated with the coupon.
-    """
-    messenger = WhatsApp(
-        os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
-    )
+        components = componentsBuilder.build()
 
-    componentsBuilder = ComponentsBuilder()
-    componentsBuilder.add_text(campaign.campaign.reward_qty)
-    componentsBuilder.add_text(campaign.campaign.reward_name)
-    componentsBuilder.add_text(campaign.campaign.store.name)
-    componentsBuilder.add_text(campaign.campaign.item_name)
-    componentsBuilder.add_text(campaign.campaign.item_qty)
-    componentsBuilder.add_text(coupon)
+        self.send_template(
+            template="coupon",
+            recipient=user,
+            components=components,
+        )
 
-    components = componentsBuilder.build()
+    def send_periodic_message(self, *campaign_user_list: CampaignUser):
+        """
+        Sends a periodic message to the user with the information about the campaigns passed as arguments.
+        """
 
-    user_number_id = str(user.phone_number).replace("+", "")
-    messenger.send_template(
-        template="reward",
-        recipient_id=user_number_id,
-        lang=os.environ.get("WHATSAPP_LANG"),
-        components=components,
-    )
+        def select_template(campaign_user_count: int) -> str:
+            """
+            Selects the template to be used for the message.
+            """
+            template_map = {1: "periodic_message_1", 2: "periodic_message_2"}
 
+            try:
+                return template_map[campaign_user_count]
+            except KeyError:
+                raise NotImplementedError
 
-"""
-The periodic notification portion is especially not ideal and should be refactored even sooner.
-"""
+        template = select_template(len(campaign_user_list))
+        user = campaign_user_list[0].user
 
+        componentsBuilder = ComponentsBuilder()
+        componentsBuilder.add_user_info(user)
 
-def periodic_notification(user: CustomUser, *campaign_users: CampaignUser):
-    """
-    Sends a periodic notification to the user with the information about the campaigns associated with the user.
-    """
-    if len(campaign_users) == 2:
-        _periodic_notification(user, campaign_users)
-    else:
-        raise NotImplementedError
+        for campaign_user in campaign_user_list:
+            componentsBuilder.add_regular_campaign_info(campaign_user.campaign)
 
+        components = componentsBuilder.build()
 
-def _periodic_notification(user: CustomUser, *campaign_users: CampaignUser):
-    """
-    Called when the user has two campaigns associated with it.
-    """
-    messenger = WhatsApp(
-        os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
-    )
-
-    campaign1 = campaign_users[0]
-    campaign2 = campaign_users[1]
-
-    user_name = user.first_name
-
-    campaign1_store_name = campaign1.campaign.store.name
-    campaign1_item_qty_left = campaign1.campaign.item_qty - campaign1.progress
-    campaign1_item = campaign1.campaign.item_name
-    campaign1_reward = (
-        f"{campaign1.campaign.reward_qty} {campaign1.campaign.reward_name}"
-    )
-
-    campaign2_store_name = campaign2.campaign.store.name
-    campaign2_item_qty_left = campaign2.campaign.item_qty - campaign2.progress
-    campaign2_item = campaign2.campaign.item_name
-    campaign2_reward = (
-        f"{campaign2.campaign.reward_qty} {campaign2.campaign.reward_name}"
-    )
-
-    componentsBuilder = ComponentsBuilder()
-    componentsBuilder.add_text(user_name)
-    componentsBuilder.add_text(campaign1_store_name)
-    componentsBuilder.add_text(campaign1_item_qty_left)
-    componentsBuilder.add_text(campaign1_item)
-    componentsBuilder.add_text(campaign1_reward)
-    componentsBuilder.add_text(campaign2_store_name)
-    componentsBuilder.add_text(campaign2_item_qty_left)
-    componentsBuilder.add_text(campaign2_item)
-    componentsBuilder.add_text(campaign2_reward)
-
-    components = componentsBuilder.build()
-
-    user_number_id = str(user.phone_number).replace("+", "")
-    messenger.send_template(
-        template="periodic_message",
-        recipient_id=user_number_id,
-        lang=os.environ.get("WHATSAPP_LANG"),
-        components=components,
-    )
+        self.send_template(
+            template=template,
+            recipient=user,
+            components=components,
+        )
