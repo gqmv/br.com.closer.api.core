@@ -14,7 +14,7 @@ class TestUserRegistrationForm:
 
         assert form.is_valid()
 
-        mock_welcome_message = mocker.patch("web.forms.welcome_message")
+        mock_welcome_message = mocker.patch("web.forms.WhatsAppService.send_welcome_message")
         mock_welcome_message.return_value = None
 
         user = form.save()
@@ -33,7 +33,7 @@ class TestUserRegistrationForm:
 
         assert form.is_valid()
 
-        mock_welcome_message = mocker.patch("web.forms.welcome_message")
+        mock_welcome_message = mocker.patch("web.forms.WhatsAppService.send_welcome_message")
         mock_welcome_message.return_value = None
 
         user = form.save(store_id=store.id)

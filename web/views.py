@@ -12,7 +12,7 @@ def user_register(request, store_id: int = None):
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save(store_id=store_id)
+            form.save(store_id=store_id)
             return HttpResponseRedirect("/")
     else:
         form = UserRegistrationForm()

@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from api.services import welcome_message
+from api.services import WhatsAppService
 from authentication.models import CustomUser
 from stores.models import Store
 
@@ -31,6 +31,8 @@ class UserRegistrationForm(ModelForm):
 
         if store.exists():
             store = store.get()
-            welcome_message(user, store)
+
+            whatsapp_service = WhatsAppService()
+            whatsapp_service.send_welcome_message(user, store)
 
         return user
