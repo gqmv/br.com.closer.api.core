@@ -7,6 +7,10 @@ from stores.models import Store
 
 
 class UserRegistrationForm(ModelForm):
+    """
+    Form for registering a new user.
+    """
+
     accept_terms = forms.BooleanField(
         required=True,
         label="I accept the terms of use",
@@ -18,6 +22,10 @@ class UserRegistrationForm(ModelForm):
         fields = ("tax_id", "phone_number", "first_name")
 
     def save(self, commit: bool = True, store_id: int = None) -> CustomUser:
+        """
+        Saves the user.
+        If the optional parameter store_id is passed, a welcome message is sent to the user.
+        """
         user = super().save(commit)
         store = Store.objects.filter(id=store_id)
 

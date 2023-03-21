@@ -4,7 +4,11 @@ from django.http import HttpResponseRedirect
 from .forms import UserRegistrationForm
 
 
-def user_register(request, store_id=None):
+def user_register(request, store_id: int = None):
+    """
+    View for registering a new user.
+    It receives a store_id as a parameter, which is optional.
+    """
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():

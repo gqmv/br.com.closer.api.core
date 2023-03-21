@@ -4,12 +4,25 @@ from heyoo import WhatsApp
 from authentication.models import CustomUser
 from stores.models import CampaignUser, Store
 
+"""
+The contents of this file are definitely not ideal and should be refactored soon.
+"""
 
-def generate_coupon(store, item, quantity):
+
+def generate_coupon(store: Store, reward_id: int, reward_qty: int) -> str:
+    """
+    This function is responsible for generating a coupon code for a given store, reward id and reward quantity.
+    """
     return "XXX-YYY-ZZZ"
 
 
 class ComponentsBuilder:
+    """
+    This class is responsible for building the components of a WhatsApp message.
+    To learn more about the components of a WhatsApp message, check out the documentation:
+    https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates
+    """
+
     def __init__(self):
         self.components = [
             {
@@ -18,14 +31,23 @@ class ComponentsBuilder:
             }
         ]
 
-    def add_text(self, text):
+    def add_text(self, text: str):
+        """
+        Adds a text field to the components.
+        """
         self.components[0]["parameters"].append({"type": "text", "text": text})
 
-    def build(self):
+    def build(self) -> list[dict]:
+        """
+        Returns the components.
+        """
         return self.components
 
 
 def welcome_message(user: CustomUser, store: Store):
+    """
+    Sends a welcome message to the user with the information about the reward associated with the store.
+    """
     if store.welcomecampaign is None:
         return
 
@@ -52,6 +74,9 @@ def welcome_message(user: CustomUser, store: Store):
 
 
 def notify_coupon(user: CustomUser, coupon: str, campaign: CampaignUser):
+    """
+    Sends a message to the user with the coupon code and the information about the campaign associated with the coupon.
+    """
     messenger = WhatsApp(
         os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
     )
@@ -75,7 +100,15 @@ def notify_coupon(user: CustomUser, coupon: str, campaign: CampaignUser):
     )
 
 
+"""
+The periodic notification portion is especially not ideal and should be refactored even sooner.
+"""
+
+
 def periodic_notification(user: CustomUser, *campaign_users: CampaignUser):
+    """
+    Sends a periodic notification to the user with the information about the campaigns associated with the user.
+    """
     if len(campaign_users) == 2:
         _periodic_notification(user, campaign_users)
     else:
@@ -83,6 +116,9 @@ def periodic_notification(user: CustomUser, *campaign_users: CampaignUser):
 
 
 def _periodic_notification(user: CustomUser, *campaign_users: CampaignUser):
+    """
+    Called when the user has two campaigns associated with it.
+    """
     messenger = WhatsApp(
         os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
     )
