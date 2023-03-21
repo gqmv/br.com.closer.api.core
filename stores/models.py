@@ -10,6 +10,10 @@ class Store(models.Model):
 
 
 class BaseCampaign(models.Model):
+    """
+    Abstract model for campaigns.
+    """
+
     name = models.CharField(max_length=100)
     reward_id = models.CharField(max_length=100)
     reward_name = models.CharField(max_length=100)
@@ -24,10 +28,18 @@ class BaseCampaign(models.Model):
 
 
 class WelcomeCampaign(BaseCampaign):
+    """
+    A campaign that is triggered when a user registers in the system with an affiliated store.
+    """
+
     store = models.OneToOneField(Store, on_delete=models.CASCADE, unique=True)
 
 
 class RegularCampaign(BaseCampaign):
+    """
+    A campaign that is triggered when a user makes "item_qty" purchases of "item_id".
+    """
+
     item_id = models.CharField(max_length=100)
     item_name = models.CharField(max_length=100)
     item_qty = models.IntegerField()
@@ -37,6 +49,10 @@ class RegularCampaign(BaseCampaign):
 
 
 class CampaignUser(models.Model):
+    """
+    A model that represents the progress of a user in a campaign.
+    """
+
     campaign = models.ForeignKey(RegularCampaign, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     progress = models.IntegerField(default=0)

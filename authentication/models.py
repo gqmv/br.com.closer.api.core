@@ -14,8 +14,16 @@ from .exceptions import NullTaxIdError, InvalidPermissionError
 
 class CustomUserManager(BaseUserManager):
     def _create_user(
-        self, tax_id, phone_number, first_name, password=None, **extra_fields
-    ):
+        self,
+        tax_id: str,
+        phone_number: str,
+        first_name: str,
+        password: str = None,
+        **extra_fields
+    ) -> "CustomUser":
+        """
+        Used as a helper method for creating a user.
+        """
         if not tax_id:
             raise NullTaxIdError()
 
@@ -29,7 +37,7 @@ class CustomUserManager(BaseUserManager):
         )
 
         if not password:
-            user.set_unusable_password()
+            user.set_unusable_password()  # Note that, since we don't plan on using a password for normal users, we set the password to be unusable by default.
         else:
             user.password = make_password(password)
 
@@ -37,8 +45,16 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_user(
-        self, tax_id, phone_number, first_name, password=None, **extra_fields
-    ):
+        self,
+        tax_id: str,
+        phone_number: str,
+        first_name: str,
+        password: str = None,
+        **extra_fields
+    ) -> "CustomUser":
+        """
+        Creates and saves a user with the given tax_id, phone_number, first_name and password.
+        """
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(
@@ -46,8 +62,17 @@ class CustomUserManager(BaseUserManager):
         )
 
     def create_superuser(
-        self, tax_id, phone_number, first_name, password=None, **extra_fields
-    ):
+        self,
+        tax_id: str,
+        phone_number: str,
+        first_name: str,
+        password: str = None,
+        **extra_fields
+    ) -> "CustomUser":
+        """
+        Creates and saves a superuser with the given tax_id, phone_number, first_name and password.
+        It also sets is_staff and is_superuser to True.
+        """
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -62,6 +87,10 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """
+    Custom user model that uses CPF as the unique identifier instead of username.
+    """
+
     tax_id = CPFField("CPF", blank=False, unique=True)
     phone_number = PhoneNumberField(null=False, blank=False, unique=True, region="BR")
     first_name = models.CharField(_("first name"), max_length=20, blank=False)
