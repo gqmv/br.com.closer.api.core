@@ -1,0 +1,12 @@
+<html>
+    <body>
+        <h1>My First Heading</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input type="submit" value="Finalizar">
+        </form>
+    </body>
+</html>
