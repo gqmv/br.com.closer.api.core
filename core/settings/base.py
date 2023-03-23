@@ -156,7 +156,3 @@ AUTH_USER_MODEL = "authentication.CustomUser"
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
-
-WHATSAPP_LANG = "pt_BR"
-WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
-WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
