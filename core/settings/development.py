@@ -16,7 +16,6 @@ SECURE_SSL_REDIRECT = True
 CSRF_USE_SESSIONS = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_DOMAIN = "closer-api-core-htnicielra-uc.a.run.app"
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
@@ -38,3 +37,8 @@ if env.get_value("GS_BUCKET_NAME", default=None):
     DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
     STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
     GS_DEFAULT_ACL = "publicRead"
+
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL")
+ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc

@@ -19,7 +19,6 @@ import environ
 import google.auth
 from google.cloud import secretmanager
 
-logger = logging.getLogger()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -56,14 +55,6 @@ else:
 SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
-
-CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
-logger.debug(f"CLOUDRUN_SERVICE_URL: {CLOUDRUN_SERVICE_URL}")
-if CLOUDRUN_SERVICE_URL:
-    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
-    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
-else:
-    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
