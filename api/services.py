@@ -1,5 +1,6 @@
 import os
 from heyoo import WhatsApp
+from django.conf import settings
 
 from authentication.models import CustomUser
 from stores.models import CampaignUser, Store, BaseCampaign, RegularCampaign
@@ -62,7 +63,7 @@ class ComponentsBuilder:
 class WhatsAppService:
     def __init__(self):
         self.messenger = WhatsApp(
-            os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
+            settings.WHATSAPP_TOKEN, settings.WHATSAPP_NUMBER_ID
         )
 
     def send_template(
@@ -75,7 +76,7 @@ class WhatsAppService:
         self.messenger.send_template(
             template=template,
             recipient_id=user_number_id,
-            lang=os.environ.get("WHATSAPP_LANG"),
+            lang=settings.WHATSAPP_LANG,
             components=components,
         )
 
