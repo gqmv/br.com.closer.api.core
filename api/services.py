@@ -90,7 +90,7 @@ class WhatsAppService:
         components = componentsBuilder.build()
 
         self.send_template(
-            template="welcome_message",
+            template="user_welcome_message",
             recipient=user,
             components=components,
         )

@@ -28,11 +28,11 @@ class UserRegistrationForm(ModelForm):
         """
         user = super().save(commit)
         store = Store.objects.filter(id=store_id)
+        
+        whatsapp_service = WhatsAppService()
+        whatsapp_service.send_welcome_message(user)
 
         if store.exists():
-            store = store.get()
-
-            whatsapp_service = WhatsAppService()
-            whatsapp_service.send_welcome_message(user, store)
-
+            pass
+        
         return user
