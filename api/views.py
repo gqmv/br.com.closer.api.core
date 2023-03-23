@@ -35,6 +35,7 @@ class PeriodicNotificationView(APIView):
         whatsapp_service = WhatsAppService()
         for user in users:
             campaign_user_list = select_relevant_campaign_user_list(user)
-            whatsapp_service.send_periodic_message(*campaign_user_list)
+            if len(campaign_user_list) > 0:
+                whatsapp_service.send_periodic_message(*campaign_user_list)
 
         return Response(status=status.HTTP_200_OK)
