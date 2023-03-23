@@ -9,13 +9,13 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-from base import *
+from .base import *
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_USE_SESSIONS = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_DOMAIN = "closer-api-core-htnicielra-uc.a.run.app"
+SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
