@@ -30,7 +30,7 @@ class PeriodicNotificationView(APIView):
     Endpoint for sending a periodic notification to users.
     """
 
-    def post(self, request, format=None):
+    def post(self, request=None, format=None):
         users = CustomUser.objects.all()
         whatsapp_service = WhatsAppService()
         for user in users:
