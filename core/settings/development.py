@@ -48,7 +48,3 @@ SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc
 
 client = google.cloud.logging.Client()
 client.setup_logging()
-
-WHATSAPP_LANG = "pt_BR"
-WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
-WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
