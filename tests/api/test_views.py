@@ -160,7 +160,7 @@ class TestRegisterPurchaseView:
             campaign_user1.campaign.store.pos_service
         )
         generate_coupon_mock.assert_called_once()
-        notify_coupon_mock.assert_called_once_with(user, campaign_user1, "XXX-YYY-ZZZ")
+        notify_coupon_mock.assert_called_once_with(user, campaign_user1.campaign, "XXX-YYY-ZZZ")
 
         assert response.status_code == status.HTTP_201_CREATED
 
