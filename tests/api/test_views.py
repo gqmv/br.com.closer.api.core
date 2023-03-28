@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
+from stores.services import DummyPOSService
 from tests.stores.factories import (
     StoreFactory,
     RegularCampaignFactory,
@@ -138,6 +139,8 @@ class TestRegisterPurchaseView:
             item_qty=campaign_user1.campaign.item_qty,
         )
 
+        get_pos_service_mock = mocker.patch("api.utils.get_pos_service")
+        get_pos_service_mock.return_value = DummyPOSService
         generate_coupon_mock = mocker.patch(
             "stores.services.DummyPOSService.generate_coupon_code"
         )

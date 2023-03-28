@@ -3,7 +3,7 @@ from authentication.models import CustomUser
 from django.db.models import F
 
 from .services import WhatsAppService
-from stores.services import DummyPOSService
+from stores.services import get_pos_service
 
 
 def select_relevant_campaign_user_list(user: CustomUser) -> list[CampaignUser]:
@@ -28,7 +28,7 @@ def update_campaign_user_progress(campaign_user: CampaignUser, item_qty: int):
     campaign_user.save()
 
     campaign_user.refresh_from_db()
-    pos_service = DummyPOSService()
+    pos_service = get_pos_service(campaign_user.campaign.store.pos_service)()
     whatsapp_service = WhatsAppService()
     while campaign_user.progress >= campaign_user.campaign.item_qty:
         coupon = pos_service.generate_coupon_code(
