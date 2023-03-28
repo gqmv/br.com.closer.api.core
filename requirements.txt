@@ -25,3 +25,4 @@ django-storages[google]==1.11.1
 django-environ==0.4.5
 phonenumbers==8.12.34
 google-cloud-logging
+django-cryptography

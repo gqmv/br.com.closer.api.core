@@ -13,6 +13,7 @@ from tests.stores.factories import (
 from stores.models import CampaignUser
 from .factories import PurchaseRegistrationRequestFactory
 from tests.authentication.factories import CustomUserFactory
+from api import utils as api_utils
 
 
 @pytest.fixture
@@ -125,10 +126,13 @@ class TestRegisterPurchaseView:
             item_qty=1,
         )
 
-        campaign_user_creator = mocker.spy(CampaignUser.objects, "create")
+        campaign_user_creator = mocker.spy(CampaignUser.objects, "get_or_create")
         response = self.client.post(self.endpoint, request)
 
+        campaign_user = CampaignUser.objects.get(user=user, campaign=campaign1)
+
         campaign_user_creator.assert_called_once()
+        assert campaign_user_creator.spy_return == (campaign_user, True)
         assert response.status_code == status.HTTP_201_CREATED
 
     def test_coupon_generated(self, user, campaign_user1, mocker):
@@ -152,8 +156,38 @@ class TestRegisterPurchaseView:
 
         response = self.client.post(self.endpoint, request)
 
+        get_pos_service_mock.assert_called_once_with(
+            campaign_user1.campaign.store.pos_service
+        )
         generate_coupon_mock.assert_called_once()
-
         notify_coupon_mock.assert_called_once_with(user, campaign_user1, "XXX-YYY-ZZZ")
+
+        assert response.status_code == status.HTTP_201_CREATED
+
+    def test_store_with_no_pos_service(self, user, mocker):
+        store = StoreFactory(pos_service=None)
+        campaign = RegularCampaignFactory(store=store, item_qty=5)
+        campaign_user = CampaignUserFactory(campaign=campaign, user=user)
+
+        request = PurchaseRegistrationRequestFactory(
+            user_entity=user,
+            store_entity=store,
+            item_id=campaign.item_id,
+            item_qty=campaign.item_qty,
+        )
+
+        get_pos_service_mock = mocker.spy(api_utils, "get_pos_service")
+        generate_coupon_mock = mocker.patch(
+            "stores.services.DummyPOSService.generate_coupon_code"
+        )
+        notify_coupon_mock = mocker.patch(
+            "api.utils.WhatsAppService.send_coupon_message"
+        )
+
+        response = self.client.post(self.endpoint, request)
+
+        get_pos_service_mock.assert_called_once_with(store.pos_service)
+        generate_coupon_mock.assert_not_called()
+        notify_coupon_mock.assert_not_called()
 
         assert response.status_code == status.HTTP_201_CREATED

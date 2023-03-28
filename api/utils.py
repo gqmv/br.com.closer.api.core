@@ -20,15 +20,16 @@ def select_relevant_campaign_user_list(user: CustomUser) -> list[CampaignUser]:
     return list(campaign_users)
 
 
-def update_campaign_user_progress(campaign_user: CampaignUser, item_qty: int):
+def handle_campaign_user_rewards(campaign_user: CampaignUser):
     """
-    Updates the progress of a campaign.
+    Handles the rewards for a campaign user.
     """
-    campaign_user.progress = F("progress") + item_qty
-    campaign_user.save()
+    pos_service_class = get_pos_service(campaign_user.campaign.store.pos_service)
 
-    campaign_user.refresh_from_db()
-    pos_service = get_pos_service(campaign_user.campaign.store.pos_service)()
+    if pos_service_class is None:
+        return
+
+    pos_service = pos_service_class()
     whatsapp_service = WhatsAppService()
     while campaign_user.progress >= campaign_user.campaign.item_qty:
         coupon = pos_service.generate_coupon_code(
@@ -37,8 +38,18 @@ def update_campaign_user_progress(campaign_user: CampaignUser, item_qty: int):
             campaign_user.campaign.reward_qty,
         )
 
-        whatsapp_service.send_coupon_message(campaign_user.user, campaign_user, coupon)
+        whatsapp_service.send_coupon_message(
+            campaign_user.user, campaign_user.campaign, coupon
+        )
+        update_campaign_user_progress(campaign_user, -campaign_user.campaign.item_qty)
 
-        campaign_user.progress = F("progress") - campaign_user.campaign.item_qty
-        campaign_user.save()
-        campaign_user.refresh_from_db()
+
+def update_campaign_user_progress(campaign_user: CampaignUser, item_qty_diff: int):
+    """
+    Updates the progress of a campaign.
+    """
+    campaign_user.progress = F("progress") + item_qty_diff
+    campaign_user.save()
+    campaign_user.refresh_from_db()
+
+    return campaign_user

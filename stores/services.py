@@ -9,18 +9,18 @@ class AbstractPOSServiceRegistry(ABCMeta):
     REGISTRY = {}
 
     def __new__(cls, name, bases, attrs):
-        new_class = type.__new__(cls, name, bases, attrs)
+        new_class = super().__new__(cls, name, bases, attrs)
         if hasattr(new_class, "_pos_service_name"):
             cls.REGISTRY[new_class._pos_service_name] = new_class
 
-        return super().__new__(cls, name, bases, attrs)
+        return new_class
 
     @classmethod
     def get_service(cls, service_name: str) -> "AbstractPOSService":
         """
         Returns the service with the given name.
         """
-        return cls.REGISTRY[service_name]
+        return cls.REGISTRY.get(service_name, None)
 
     @classmethod
     def get_django_choices(cls) -> list[tuple[str, str]]:
