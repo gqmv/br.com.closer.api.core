@@ -15,6 +15,8 @@ class StoreFactory(factory.django.DjangoModelFactory):
         model = Store
 
     name = factory.Faker("company")
+    pos_service = "dummy"
+    api_key = "dummy"
 
 
 class BaseCampaignFactory(factory.django.DjangoModelFactory):
