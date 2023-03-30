@@ -91,8 +91,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Custom user model that uses CPF as the unique identifier instead of username.
     """
 
+    class Meta:
+        verbose_name = "Usuário"
+
     tax_id = CPFField("CPF", blank=False, unique=True)
-    phone_number = PhoneNumberField(null=False, blank=False, unique=True, region="BR")
+    phone_number = PhoneNumberField(
+        "Número de Celular", null=False, blank=False, unique=True, region="BR"
+    )
     first_name = models.CharField(_("first name"), max_length=20, blank=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

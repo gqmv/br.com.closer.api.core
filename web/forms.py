@@ -13,8 +13,8 @@ class UserRegistrationForm(ModelForm):
 
     accept_terms = forms.BooleanField(
         required=True,
-        label="I accept the terms of use",
-        error_messages={"required": "You must accept the terms of use to register."},
+        label="Eu aceito os termos de uso.",
+        error_messages={"required": "Você precisa aceitar os termos de uso para se cadastrar."},
     )
 
     class Meta:

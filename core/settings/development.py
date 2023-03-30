@@ -35,7 +35,7 @@ if os.environ.get("USE_CLOUD_SQL_AUTH_PROXY"):
 # Define static storage via django-storages[google]
 if env.get_value("GS_BUCKET_NAME", default=None):
     GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-    STATICFILES_DIRS = []
+    STATICFILES_DIRS = STATICFILES_DIRS + []
     DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
     STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
     GS_DEFAULT_ACL = "publicRead"
