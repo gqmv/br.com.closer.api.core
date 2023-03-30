@@ -119,7 +119,7 @@ class WhatsAppService:
             components=components,
         )
 
-    def send_periodic_message(self, *campaign_user_list: CampaignUser):
+    def send_periodic_message(self, campaign_user_list: list[CampaignUser]):
         """
         Sends a periodic message to the user with the information about the campaigns passed as arguments.
         """
