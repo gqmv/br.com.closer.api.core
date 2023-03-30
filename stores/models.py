@@ -1,9 +1,19 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django_cryptography.fields import encrypt
+
+from stores.services import AbstractPOSServiceRegistry
 
 
 class Store(models.Model):
     name = models.CharField(max_length=100)
+    pos_service = models.CharField(
+        max_length=30,
+        choices=AbstractPOSServiceRegistry.get_django_choices(),
+        null=True,
+        blank=True,
+    )
+    api_key = encrypt(models.CharField(max_length=100, null=True, blank=True))
 
     def __str__(self):
         return self.name
