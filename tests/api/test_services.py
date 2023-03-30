@@ -6,7 +6,7 @@ from api.services import (
     get_phone_number_as_whatsapp_id,
 )
 from tests.authentication.factories import CustomUserFactory
-from tests.stores.factories import RegularCampaignFactory
+from tests.stores.factories import RegularCampaignFactory, CampaignUserFactory
 
 
 @pytest.mark.django_db
@@ -122,3 +122,108 @@ class TestWhatsAppService:
 
         assert parameters[3]["type"] == "text"
         assert parameters[3]["text"] == "coupon_code"
+
+    def test_send_periodic_message(self, mocker):
+        # Setup
+        mock_send_template = mocker.patch("api.services.WhatsApp.send_template")
+
+        user = CustomUserFactory()
+        campaign = RegularCampaignFactory()
+        campaign_user = CampaignUserFactory(user=user, campaign=campaign)
+
+        # Behavior
+        whatsapp_service = WhatsAppService()
+        whatsapp_service.send_periodic_message([campaign_user])
+
+        # Assertions
+        components = mock_send_template.call_args.kwargs["components"]
+        template = mock_send_template.call_args.kwargs["template"]
+        parameters = components[0]["parameters"]
+
+        assert template == "periodic_message_1"
+
+        assert parameters[0]["type"] == "text"
+        assert parameters[0]["text"] == user.first_name
+
+        assert parameters[1]["type"] == "text"
+        assert parameters[1]["text"] == campaign.item_qty
+
+        assert parameters[2]["type"] == "text"
+        assert parameters[2]["text"] == campaign.item_name
+
+        assert parameters[3]["type"] == "text"
+        assert parameters[3]["text"] == campaign.reward_qty
+
+        assert parameters[4]["type"] == "text"
+        assert parameters[4]["text"] == campaign.reward_name
+
+        assert parameters[5]["type"] == "text"
+        assert parameters[5]["text"] == campaign.store.name
+
+    def test_send_periodic_message_temp_2(self, mocker):
+        # Setup
+        mock_send_template = mocker.patch("api.services.WhatsApp.send_template")
+
+        user = CustomUserFactory()
+        campaign = RegularCampaignFactory()
+        campaign2 = RegularCampaignFactory()
+        campaign_user = CampaignUserFactory(user=user, campaign=campaign)
+        campaign_user2 = CampaignUserFactory(user=user, campaign=campaign2)
+
+        # Behavior
+        whatsapp_service = WhatsAppService()
+        whatsapp_service.send_periodic_message([campaign_user, campaign_user2])
+
+        # Assertions
+        components = mock_send_template.call_args.kwargs["components"]
+        template = mock_send_template.call_args.kwargs["template"]
+        parameters = components[0]["parameters"]
+
+        assert template == "periodic_message_2"
+
+        assert parameters[0]["type"] == "text"
+        assert parameters[0]["text"] == user.first_name
+
+        assert parameters[1]["type"] == "text"
+        assert parameters[1]["text"] == campaign.item_qty
+
+        assert parameters[2]["type"] == "text"
+        assert parameters[2]["text"] == campaign.item_name
+
+        assert parameters[3]["type"] == "text"
+        assert parameters[3]["text"] == campaign.reward_qty
+
+        assert parameters[4]["type"] == "text"
+        assert parameters[4]["text"] == campaign.reward_name
+
+        assert parameters[5]["type"] == "text"
+        assert parameters[5]["text"] == campaign.store.name
+
+        assert parameters[6]["type"] == "text"
+        assert parameters[6]["text"] == campaign2.item_qty
+
+        assert parameters[7]["type"] == "text"
+        assert parameters[7]["text"] == campaign2.item_name
+
+        assert parameters[8]["type"] == "text"
+        assert parameters[8]["text"] == campaign2.reward_qty
+
+        assert parameters[9]["type"] == "text"
+        assert parameters[9]["text"] == campaign2.reward_name
+
+        assert parameters[10]["type"] == "text"
+        assert parameters[10]["text"] == campaign2.store.name
+
+    def test_send_periodic_message_temp_nonexistent(self, mocker):
+        # Setup
+        mock_send_template = mocker.patch("api.services.WhatsApp.send_template")
+
+        user = CustomUserFactory()
+
+        # Behavior
+        whatsapp_service = WhatsAppService()
+        with pytest.raises(NotImplementedError):
+            whatsapp_service.send_periodic_message([])
+
+        # Assertions
+        mock_send_template.assert_not_called()
