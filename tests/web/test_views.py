@@ -39,15 +39,3 @@ class TestUserRegisterView:
         response = self.client.post(self.url, data=form_data)
 
         mock_form_save.assert_not_called()
-
-
-class Banana:
-    def __init__(self, name):
-        self.name = name
-        
-    def __str__(self):
-        return self.name
-        
-x = Banana("Banana")
-
-print(x) x.__str__()
