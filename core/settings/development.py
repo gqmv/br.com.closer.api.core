@@ -11,9 +11,9 @@ from .base import *
 
 # Load the settings from the environment variable
 env = environ.Env()
-_, env["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+_, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
 
-project_id = env["GOOGLE_CLOUD_PROJECT"]
+project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
 client = secretmanager.SecretManagerServiceClient()
 settings_name = "application_settings"
 name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
