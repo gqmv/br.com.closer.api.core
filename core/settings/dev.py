@@ -39,10 +39,13 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # SECURITY WARNING: define the correct hosts in production!
 # CSRF Settings
-CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL")
-ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
-CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
-SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
+if CLOUDRUN_SERVICE_URL:
+    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+    SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc
+else:
+    ALLOWED_HOSTS = ["*"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG", default=False)
