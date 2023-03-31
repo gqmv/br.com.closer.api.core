@@ -25,13 +25,24 @@ env.read_env(io.StringIO(payload))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
-# If defined, add service URL to Django security settings
-CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
-if CLOUDRUN_SERVICE_URL:
-    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
-    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
-else:
-    ALLOWED_HOSTS = ["*"]
+# SSL settings
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = True
+CSRF_USE_SESSIONS = False
+
+# Security settings
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+
+# SECURITY WARNING: define the correct hosts in production!
+# CSRF Settings
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL")
+ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG", default=False)
