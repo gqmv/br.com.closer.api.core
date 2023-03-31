@@ -2,6 +2,7 @@ import io
 import os
 from urllib.parse import urlparse
 from google.cloud import secretmanager
+import google.auth
 
 import environ
 
