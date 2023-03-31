@@ -49,3 +49,4 @@ options:
 
 substitutions:
   _IMAGE_NAME: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
+  _REGION: ${_DEPLOY_REGION}
