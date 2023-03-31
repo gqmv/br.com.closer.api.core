@@ -9,7 +9,7 @@ import environ
 # Import the original settings from each template
 from .base import *
 
-# Load the settings from the environment variable
+# Load the settings from the secret manager
 env = environ.Env()
 _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
 
@@ -22,7 +22,7 @@ payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 env.read_env(io.StringIO(payload))
 
 
-# Setting this value from django-environ
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
 # If defined, add service URL to Django security settings
@@ -33,10 +33,10 @@ if CLOUDRUN_SERVICE_URL:
 else:
     ALLOWED_HOSTS = ["*"]
 
-# Default false. True allows default landing pages to be visible
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG", default=False)
 
-# Set this value from django-environ
+# In production, we use Cloud SQL
 DATABASES = {"default": env.db()}
 
 # Change database settings if using the Cloud SQL Auth Proxy
@@ -52,5 +52,6 @@ DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 GS_DEFAULT_ACL = "publicRead"
 
+# WhatsApp settings
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
