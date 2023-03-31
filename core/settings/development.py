@@ -40,3 +40,6 @@ STATICFILES_DIRS = []
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 GS_DEFAULT_ACL = "publicRead"
+
+WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
+WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
