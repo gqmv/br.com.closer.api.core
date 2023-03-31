@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "cpf_field",
     "django_bootstrap5",
     "drf_spectacular",
+    "storages",
     # Local apps
     "core",
     "authentication",
