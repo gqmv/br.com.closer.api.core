@@ -1,13 +1,9 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "${_IMAGE_NAME}", "."]
-    env:
-      - "ENV=$_ENV"
 
   - name: "gcr.io/cloud-builders/docker"
     args: ["push",  "${_IMAGE_NAME}"]
-    env:
-      - "ENV=$_ENV"
 
   - name: "gcr.io/google-appengine/exec-wrapper"
     args:
@@ -16,13 +12,13 @@ steps:
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
         "-s",
         "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "-e",
+        "ENV=${_ENV}",
         "--",
         "python",
         "manage.py",
         "migrate",
       ]
-    env:
-      - "ENV=$_ENV"
 
   - name: "gcr.io/google-appengine/exec-wrapper"
     args:
@@ -31,14 +27,14 @@ steps:
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
         "-s",
         "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "-e",
+        "ENV=${_ENV}",
         "--",
         "python",
         "manage.py",
         "collectstatic",
         "--no-input",
       ]
-    env:
-      - "ENV=$_ENV"
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     entrypoint: gcloud
@@ -51,8 +47,6 @@ steps:
         "--region=${_REGION}",
         "--platform=managed",
       ]
-    env:
-      - "ENV=$_ENV"
 
 options:
   dynamic_substitutions: true
