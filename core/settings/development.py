@@ -1,6 +1,7 @@
 import io
 import os
 from urllib.parse import urlparse
+from google.cloud import secretmanager
 
 import environ
 
@@ -9,7 +10,16 @@ from .base import *
 
 # Load the settings from the environment variable
 env = environ.Env()
-env.read_env(io.StringIO(os.environ.get("APPLICATION_SETTINGS", None)))
+_, env["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+
+project_id = env["GOOGLE_CLOUD_PROJECT"]
+client = secretmanager.SecretManagerServiceClient()
+settings_name = "application_settings"
+name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+env.read_env(io.StringIO(payload))
+
 
 # Setting this value from django-environ
 SECRET_KEY = env("SECRET_KEY")
