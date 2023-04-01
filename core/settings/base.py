@@ -10,14 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
-import io
 from pathlib import Path
-from urllib.parse import urlparse
-import logging
-
-import environ
-import google.auth
-from google.cloud import secretmanager
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
