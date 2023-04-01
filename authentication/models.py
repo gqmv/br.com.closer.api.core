@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
-from cpf_field.models import CPFField
+from django_cpf_cnpj.fields import CPFField
 
 from .exceptions import NullTaxIdError, InvalidPermissionError
 
@@ -92,13 +92,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
 
     class Meta:
-        verbose_name = "Usuário"
+        verbose_name = _("User")
 
-    tax_id = CPFField("CPF", blank=False, unique=True)
+    tax_id = CPFField(verbose_name=_("CPF"), blank=False, unique=True)
     phone_number = PhoneNumberField(
-        "Número de Celular", null=False, blank=False, unique=True, region="BR"
+        verbose_name=_("Phone Number"), null=False, blank=False, unique=True, region="BR"
     )
-    first_name = models.CharField(_("first name"), max_length=20, blank=False)
+    first_name = models.CharField(_("First Name"), max_length=20, blank=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -109,4 +109,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.tax_id
+        return self.tax_id.__str__()

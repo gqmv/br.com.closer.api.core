@@ -1,11 +1,14 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
+    id: "build"
     args: ["build", "-t", "${_IMAGE_NAME}", "."]
 
   - name: "gcr.io/cloud-builders/docker"
+    id: "push"
     args: ["push",  "${_IMAGE_NAME}"]
 
   - name: "gcr.io/google-appengine/exec-wrapper"
+    id: "migrate"
     args:
       [
         "-i",
@@ -21,6 +24,7 @@ steps:
       ]
 
   - name: "gcr.io/google-appengine/exec-wrapper"
+    id: "collectstatic"
     args:
       [
         "-i",
@@ -36,7 +40,23 @@ steps:
         "--no-input",
       ]
 
+  - name: "gcr.io/google-appengine/exec-wrapper"
+    id: "compilemessages"
+    args:
+      [
+        "-i",
+        "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
+        "-s",
+        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "-e",
+        "ENV=${_ENV}",
+        "--",
+        "django-admin",
+        "compilemessages",
+      ]
+
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    id: "deploy"
     entrypoint: gcloud
     args:
       [

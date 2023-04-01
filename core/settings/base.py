@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "phonenumber_field",
     "cpf_field",
+    "django_cpf_cnpj",
     "django_bootstrap5",
     "drf_spectacular",
     "storages",
@@ -101,6 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "pt-br"
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 TIME_ZONE = "UTC"
 

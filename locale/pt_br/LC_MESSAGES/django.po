@@ -1,0 +1,94 @@
+# CLOSER CORE TRANSLATIONS
+# Copyright (C) 2023 CLOSER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR gabriel.vieira@closer.app.br, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-01 00:33-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: authentication/models.py:95 stores/models.py:78
+msgid "User"
+msgstr ""
+
+#: authentication/models.py:97
+msgid "CPF"
+msgstr "CPF"
+
+#: authentication/models.py:99
+msgid "Phone Number"
+msgstr "Número de Celular"
+
+#: authentication/models.py:101
+msgid "First Name"
+msgstr "Primeiro Nome"
+
+#: stores/models.py:10
+msgid "Name"
+msgstr "Nome"
+
+#: stores/models.py:12
+msgid "POS service"
+msgstr "Serviço de PDV"
+
+#: stores/models.py:20
+msgid "API key"
+msgstr "Chave de API"
+
+#: stores/models.py:33
+msgid "Nome"
+msgstr "Nome"
+
+#: stores/models.py:34
+msgid "Reward ID"
+msgstr "ID da Recompensa"
+
+#: stores/models.py:35
+msgid "Reward name"
+msgstr "Nome da Recompensa"
+
+#: stores/models.py:36
+msgid "Reward quantity"
+msgstr "Quantidade da Recompensa"
+
+#: stores/models.py:52
+msgid "Store"
+msgstr "Loja"
+
+#: stores/models.py:61
+msgid "Item ID"
+msgstr "ID do Item"
+
+#: stores/models.py:62
+msgid "Item name"
+msgstr "Nome do Item"
+
+#: stores/models.py:63
+msgid "Item quantity"
+msgstr "Quantidade do Item"
+
+#: stores/models.py:75
+msgid "Campaign"
+msgstr "Campanha"
+
+#: stores/models.py:80
+msgid "Progress"
+msgstr "Progresso"
+
+#: web/forms.py:17
+msgid "I accept the terms of use."
+msgstr "Eu aceito os termos de uso."
+
+#: web/forms.py:18
+msgid "You must accept the terms of use to register."
+msgstr "Você deve aceitar os termos de uso para se registrar."
