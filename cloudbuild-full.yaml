@@ -46,6 +46,8 @@ steps:
       [
         "-i",
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
+        "-s",
+        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
         "-e",
         "ENV=${_ENV}",
         "--",
