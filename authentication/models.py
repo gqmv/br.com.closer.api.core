@@ -36,11 +36,6 @@ class CustomUserManager(BaseUserManager):
             **extra_fields
         )
 
-        if not password:
-            user.set_unusable_password()  # Note that, since we don't plan on using a password for normal users, we set the password to be unusable by default.
-        else:
-            user.password = make_password(password)
-
         user.save(using=self._db)
         return user
 
@@ -96,7 +91,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     tax_id = CPFField(verbose_name=_("CPF"), blank=False, unique=True)
     phone_number = PhoneNumberField(
-        verbose_name=_("Phone Number"), null=False, blank=False, unique=True, region="BR"
+        verbose_name=_("Phone Number"),
+        null=False,
+        blank=False,
+        unique=True,
+        region="BR",
     )
     first_name = models.CharField(_("First Name"), max_length=20, blank=False)
     is_active = models.BooleanField(default=True)
@@ -110,3 +109,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.tax_id.__str__()
+
+    def save(self, *args, **kwargs):
+        if not self.password:
+            self.set_unusable_password()
+
+        super().save(*args, **kwargs)
