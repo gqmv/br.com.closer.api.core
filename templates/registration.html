@@ -12,6 +12,17 @@
   }
 </style>
 {% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#id_tax_id').mask('000.000.000-00', {reverse: true});
+        $('#id_phone_number').mask('+55 (00) 00000-00000');
+    });
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center m-2">
@@ -20,8 +31,8 @@
       {% csrf_token %}
       {% bootstrap_form_errors form type="non-fields" %}
 
-      {% bootstrap_field form.tax_id layout="floating" label_class="text-secondary ms-2 fw-semibold" type="number" %}
-      {% bootstrap_field form.phone_number layout="floating" label_class="text-secondary ms-2 fw-semibold" type="tel" %}
+      {% bootstrap_field form.tax_id layout="floating" label_class="text-secondary ms-2 fw-semibold"  %}
+      {% bootstrap_field form.phone_number layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
       {% bootstrap_field form.first_name layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
       {% bootstrap_field form.accept_terms layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
             
