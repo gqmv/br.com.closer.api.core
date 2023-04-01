@@ -40,20 +40,6 @@ steps:
         "--no-input",
       ]
 
-  - name: "gcr.io/google-appengine/exec-wrapper"
-    id: "compilemessages"
-    args:
-      [
-        "-i",
-        "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
-        "-s",
-        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
-        "-e",
-        "ENV=${_ENV}",
-        "--",
-        "django-admin",
-        "compilemessages",
-      ]
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     id: "deploy"
