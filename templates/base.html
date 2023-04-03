@@ -1,0 +1,31 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="pt_BR">
+    <head>
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+        <title>{% block title %} {% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        {% block head %} {% endblock %}
+        {% block css %} {% endblock %}
+        {% block js %} {% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+        <nav class="navbar border-bottom rounded-bottom">
+            <div class="col-4 col-md-2 col-lg-1">
+                <img src="{% static 'logos/logo_gradient_transparent.png' %}" class="img-fluid"/>
+            </div>
+        </nav>
+        {% endblock %}
+
+        <div class="container">
+            {% block content %} {% endblock %}
+        </div>
+    </body>
+
+</html>

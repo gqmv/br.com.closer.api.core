@@ -28,3 +28,4 @@ google-cloud-logging
 django-cryptography
 django-cryptography
 django-bootstrap5
+django-cpf-cnpj==1.0.0

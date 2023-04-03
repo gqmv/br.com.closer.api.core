@@ -1,17 +1,22 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
+    id: "build"
     args: ["build", "-t", "${_IMAGE_NAME}", "."]
 
   - name: "gcr.io/cloud-builders/docker"
+    id: "push"
     args: ["push",  "${_IMAGE_NAME}"]
 
   - name: "gcr.io/google-appengine/exec-wrapper"
+    id: "migrate"
     args:
       [
         "-i",
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
         "-s",
         "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "-e",
+        "ENV=${_ENV}",
         "--",
         "python",
         "manage.py",
@@ -19,12 +24,15 @@ steps:
       ]
 
   - name: "gcr.io/google-appengine/exec-wrapper"
+    id: "collectstatic"
     args:
       [
         "-i",
         "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
         "-s",
         "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "-e",
+        "ENV=${_ENV}",
         "--",
         "python",
         "manage.py",
@@ -32,7 +40,9 @@ steps:
         "--no-input",
       ]
 
+
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    id: "deploy"
     entrypoint: gcloud
     args:
       [
@@ -48,7 +58,5 @@ options:
   dynamic_substitutions: true
 
 substitutions:
-  _SERVICE_NAME: "closer-api-core"
-  _REGION: "us-central1"
-  _INSTANCE_NAME: "closer-api-core"
   _IMAGE_NAME: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
+  _REGION: ${_DEPLOY_REGION}

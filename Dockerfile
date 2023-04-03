@@ -8,6 +8,7 @@ WORKDIR $APP_HOME
 # Install dependencies.
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y gettext
 
 # Copy local code to the container image.
 COPY . .

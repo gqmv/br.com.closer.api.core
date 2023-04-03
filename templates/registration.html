@@ -1,42 +1,44 @@
-<html>
-  <head>
-    {% load static %}
-    {% load django_bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
-    {% bootstrap_messages %}
-  </head>
-  <body>
-    <style type="text/css">
-      .button-custom {
-        background: rgb(252, 131, 50);
-        background: radial-gradient(
-          circle,
-          rgba(252, 131, 50, 1) 60%,
-          rgba(252, 111, 87, 1) 100%
-        );
-      }
-    </style>
-    <nav class="navbar border-bottom rounded-bottom">
-      <div class="col-4 col-md-2 col-lg-1">
-        <img
-          src="{% static 'logos/logo_gradient_transparent.png' %}"
-          class="img-fluid"
-        />
-      </div>
-    </nav>
-    <div class="container">
-      <div class="row justify-content-center m-2">
-        <form action="" method="post">
-          <div class="row">
-            {% csrf_token %} {% bootstrap_form form layout="floating" label_class="text-secondary ms-2 fw-semibold"%}
-          </div>
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block css %}
+<style type="text/css">
+  .button-custom {
+    background: rgb(252, 131, 50);
+    background: radial-gradient(
+      circle,
+      rgba(252, 131, 50, 1) 60%,
+      rgba(252, 111, 87, 1) 100%
+    );
+  }
+</style>
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
 
-          <div class="row">
-            <button type="submit" class="btn button-custom text-light fw-bold">
-              Finalizar
-            </button>
-          </div>
-        </form>
-      </div>
+<script>
+    $(document).ready(function(){
+        $('#id_tax_id').mask('000.000.000-00');
+        $('#id_phone_number').mask('+55 (00) 00000-00000');
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center m-2">
+  <form action="" method="post">
+    <div class="row">
+      {% csrf_token %}
+      {% bootstrap_form_errors form type="non-fields" %}
+
+      {% bootstrap_field form.tax_id layout="floating" label_class="text-secondary ms-2 fw-semibold"  %}
+      {% bootstrap_field form.phone_number layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+      {% bootstrap_field form.first_name layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+      {% bootstrap_field form.accept_terms layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+            
+      {% bootstrap_button "Finalizar" button_type="submit" extra_classes="button-custom fw-bold" %}
     </div>
-  </body>
-</html>
+  </form>
+</div>
+{% endblock %}
+    

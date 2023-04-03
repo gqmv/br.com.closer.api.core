@@ -1,2 +1,1 @@
-export ENV=local
-python manage.py runserver
+ENV=local python manage.py runserver
