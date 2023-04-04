@@ -1,7 +1,7 @@
 import io
 import os
 from urllib.parse import urlparse
-from google.cloud import secretmanager
+from google.cloud import secretmanager, logging
 import google.auth
 
 import environ
@@ -71,3 +71,18 @@ GS_DEFAULT_ACL = "publicRead"
 # WhatsApp settings
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
+
+# StackDriver setup
+client = logging.Client()
+# Connects the logger to the root logging handler; by default
+# this captures all logs at INFO level and higher
+client.setup_logging()
+LOGGING = {
+    "handlers": {
+        "stackdriver": {
+            "class": "google.cloud.logging.handlers.CloudLoggingHandler",
+            "client": client,
+        }
+    },
+    "loggers": {"": {"handlers": ["stackdriver"], "level": "INFO"}},
+}
