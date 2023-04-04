@@ -20,3 +20,5 @@ DATABASES = {
 # WhatsApp settings
 WHATSAPP_TOKEN = None
 WHATSAPP_NUMBER_ID = None
+
+GOOGLE_FUNCTION_SERVICE_ACCOUNT = "test-service-account"
