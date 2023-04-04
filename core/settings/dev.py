@@ -71,3 +71,6 @@ GS_DEFAULT_ACL = "publicRead"
 # WhatsApp settings
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
+
+client = logging.Client()
+client.setup_logging()
