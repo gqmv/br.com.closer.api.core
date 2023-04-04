@@ -128,22 +128,3 @@ REST_FRAMEWORK = {
 WHATSAPP_LANG = "pt_BR"
 
 GOOGLE_FUNCTION_SERVICE_ACCOUNT = None
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "stream": sys.stdout,
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": "INFO",
-            "propagate": True,
-        },
-    },
-}

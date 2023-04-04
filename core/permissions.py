@@ -54,5 +54,5 @@ class GCPServicePermission(permissions.BasePermission):
             return False
         
 
-        getLogger(__name__).info(f"Authenticated request received. Claims: {claims}")
+        getLogger().critical(f"Authenticated request received. Claims: {claims}")
         return self.validate_claims(claims, settings.GOOGLE_FUNCTION_SERVICE_ACCOUNT)

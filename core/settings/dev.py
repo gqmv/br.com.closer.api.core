@@ -71,27 +71,3 @@ GS_DEFAULT_ACL = "publicRead"
 # WhatsApp settings
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
-
-log_client = logging.Client()
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "stackdriver_logging": {
-            "class": "google.cloud.logging.handlers.CloudLoggingHandler",
-            "client": log_client,
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["stackdriver_logging"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-        "django.request": {
-            "handlers": ["stackdriver_logging"],
-            "level": "ERROR",
-        },
-    },
-}
