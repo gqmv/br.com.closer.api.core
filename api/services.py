@@ -60,6 +60,13 @@ class ComponentsBuilder:
         return self.components
 
 
+def get_phone_number_as_whatsapp_id(phone_number: str) -> str:
+    """
+    Returns the phone number as a WhatsApp ID.
+    """
+    return str(phone_number).replace("+", "")
+
+
 class WhatsAppService:
     def __init__(self):
         self.messenger = WhatsApp(
@@ -72,7 +79,7 @@ class WhatsAppService:
         """
         Sends a template message to the user.
         """
-        user_number_id = str(recipient.phone_number).replace("+", "")
+        user_number_id = get_phone_number_as_whatsapp_id(recipient.phone_number)
         self.messenger.send_template(
             template=template,
             recipient_id=user_number_id,
@@ -113,7 +120,7 @@ class WhatsAppService:
             components=components,
         )
 
-    def send_periodic_message(self, *campaign_user_list: CampaignUser):
+    def send_periodic_message(self, campaign_user_list: list[CampaignUser]):
         """
         Sends a periodic message to the user with the information about the campaigns passed as arguments.
         """
