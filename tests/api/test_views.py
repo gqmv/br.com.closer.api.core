@@ -70,7 +70,9 @@ class TestPeriodicNotificationView:
         mock_send_notification = mocker.patch(
             "api.views.WhatsAppService.send_periodic_message"
         )
+        mock_permission = mocker.patch("core.permissions.GCPServicePermission.has_permission")
         mock_send_notification.return_value = None
+        mock_permission.return_value = True
         x = self.client.post(self.endpoint)
         mock_send_notification.assert_called_once_with(campaign_user1, campaign_user2)
 

@@ -7,10 +7,11 @@ from .services import WhatsAppService
 from .serializers import PurchaseSerializer
 from .utils import select_relevant_campaign_user_list
 from authentication.models import CustomUser
+from core.permissions import GCPServicePermission
 
 
 class RegisterPurchase(APIView):
-    """_summary_
+    """
     Endpoint for registering a new purchase.
     """
 
@@ -29,6 +30,8 @@ class PeriodicNotificationView(APIView):
     """
     Endpoint for sending a periodic notification to users.
     """
+
+    permission_classes = [GCPServicePermission]
 
     def post(self, request=None, format=None):
         users = CustomUser.objects.all()
