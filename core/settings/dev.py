@@ -78,6 +78,7 @@ client = logging.Client()
 # this captures all logs at INFO level and higher
 client.setup_logging()
 LOGGING = {
+    "version": 1,
     "handlers": {
         "stackdriver": {
             "class": "google.cloud.logging.handlers.CloudLoggingHandler",
