@@ -3,6 +3,9 @@ from rest_framework.request import Request
 from django.views.generic.base import View
 from django.conf import settings
 
+# import logging
+from logging import getLogger
+
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
@@ -50,4 +53,5 @@ class GCPServicePermission(permissions.BasePermission):
         except ValueError:
             return False
 
+        getLogger(__name__).debug(f"Authenticated request received. Claims: {claims}")
         return self.validate_claims(claims, settings.GOOGLE_FUNCTION_SERVICE_ACCOUNT)
