@@ -21,7 +21,7 @@ class TestUserRegistrationForm:
 
         user = form.save()
 
-        mock_welcome_message.assert_not_called()
+        mock_welcome_message.assert_called_once_with(user)
 
         assert user.tax_id == form_data["tax_id"]
         assert user.phone_number == form_data["phone_number"]
@@ -42,4 +42,4 @@ class TestUserRegistrationForm:
 
         user = form.save(store_id=store.id)
 
-        mock_welcome_message.assert_called_once_with(user, store)
+        mock_welcome_message.assert_called_once_with(user)
