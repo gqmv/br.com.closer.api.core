@@ -72,18 +72,30 @@ GS_DEFAULT_ACL = "publicRead"
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
 
-# StackDriver setup
-client = logging.Client()
-# Connects the logger to the root logging handler; by default
-# this captures all logs at INFO level and higher
-client.setup_logging()
+log_client = logging.Client()
+
 LOGGING = {
     "version": 1,
+    "disable_existing_loggers": False,
     "handlers": {
-        "stackdriver": {
+        "stackdriver_logging": {
             "class": "google.cloud.logging.handlers.CloudLoggingHandler",
-            "client": client,
-        }
+            "client": log_client,
+        },
+        "stackdriver_error_reporting": {
+            "level": "ERROR",
+            "class": "gcp_utils.stackdriver_logging.StackdriverErrorHandler",
+        },
     },
-    "loggers": {"": {"handlers": ["stackdriver"], "level": "INFO"}},
+    "loggers": {
+        "django": {
+            "handlers": ["stackdriver_logging"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["stackdriver_logging"],
+            "level": "ERROR",
+        },
+    },
 }

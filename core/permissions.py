@@ -45,13 +45,14 @@ class GCPServicePermission(permissions.BasePermission):
 
         if auth_type.lower() != "bearer":
             return False
-
+        
         try:
             claims = id_token.verify_oauth2_token(
                 token, request=google_requests.Request()
             )
         except ValueError:
             return False
+        
 
-        getLogger(__name__).debug(f"Authenticated request received. Claims: {claims}")
+        getLogger(__name__).info(f"Authenticated request received. Claims: {claims}")
         return self.validate_claims(claims, settings.GOOGLE_FUNCTION_SERVICE_ACCOUNT)
