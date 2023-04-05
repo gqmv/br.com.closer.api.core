@@ -72,8 +72,8 @@ GS_DEFAULT_ACL = "publicRead"
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
 
-client = logging_v2.Client(project=project_id, credentials=credentials)
-handler = client.setup_logging()
+logging_client = logging_v2.Client()
+handler = logging_client.setup_logging()
 
 LOGGING = {
     "version": 1,
@@ -81,7 +81,7 @@ LOGGING = {
     "handlers": {
         "gcp": {
             "class": "google.cloud.logging_v2.handlers.CloudLoggingHandler",
-            "client": client,
+            "client": logging_client,
         },
     },
     "loggers": {
