@@ -2,9 +2,7 @@ from rest_framework import permissions
 from rest_framework.request import Request
 from django.views.generic.base import View
 from django.conf import settings
-
-# import logging
-from logging import getLogger
+import logging
 
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
@@ -31,7 +29,7 @@ class GCPServicePermission(permissions.BasePermission):
 
         return False
 
-    def has_permission(self, request: Request, view: View):
+    def _has_permission(self, request: Request, view: View):
         """
         This method is called by the DRF to check if the request has permission to access the endpoint.
         """
@@ -45,14 +43,26 @@ class GCPServicePermission(permissions.BasePermission):
 
         if auth_type.lower() != "bearer":
             return False
-        
+
         try:
             claims = id_token.verify_oauth2_token(
                 token, request=google_requests.Request()
             )
         except ValueError:
             return False
-        
 
-        getLogger().critical(f"Authenticated request received. Claims: {claims}")
         return self.validate_claims(claims, settings.GOOGLE_FUNCTION_SERVICE_ACCOUNT)
+
+    def has_permission(self, request: Request, view: View):
+        """
+        This method is called by the DRF to check if the request has permission to access the endpoint.
+        """
+        logging.get_logger(__name__).info("GCP Authenticated request received.")
+        result = self._has_permission(request, view)
+
+        if not result:
+            logging.get_logger(__name__).error(
+                "GCP Authenticated request failed to authenticate. This might be a security issue."
+            )
+
+        return result
