@@ -80,12 +80,24 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "gcp": {
-            "class": "google.cloud.logging.handlers.CloudLoggingHandler",
+            "class": "google.cloud.logging_v2.handlers.CloudLoggingHandler",
             "client": client,
         },
     },
     "loggers": {
         "": {
+            "handlers": ["gcp"],
+            "level": "INFO",
+        },
+        "root": {
+            "handlers": ["gcp"],
+            "level": "INFO",
+        },
+        "django": {
+            "handlers": ["gcp"],
+            "level": "INFO",
+        },
+        "django.request": {
             "handlers": ["gcp"],
             "level": "INFO",
         },
