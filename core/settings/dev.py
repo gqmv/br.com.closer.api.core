@@ -85,7 +85,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "django": {
+        "": {
             "handlers": ["gcp"],
             "level": "INFO",
         },
