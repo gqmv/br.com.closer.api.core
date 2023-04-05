@@ -1,6 +1,7 @@
 import os
 from heyoo import WhatsApp
 from django.conf import settings
+import logging
 
 from authentication.models import CustomUser
 from stores.models import CampaignUser, Store, BaseCampaign, RegularCampaign
@@ -69,9 +70,7 @@ def get_phone_number_as_whatsapp_id(phone_number: str) -> str:
 
 class WhatsAppService:
     def __init__(self):
-        self.messenger = WhatsApp(
-            settings.WHATSAPP_TOKEN, settings.WHATSAPP_NUMBER_ID
-        )
+        self.messenger = WhatsApp(settings.WHATSAPP_TOKEN, settings.WHATSAPP_NUMBER_ID)
 
     def send_template(
         self, template: str, recipient: CustomUser, components: list[dict]
@@ -80,12 +79,19 @@ class WhatsAppService:
         Sends a template message to the user.
         """
         user_number_id = get_phone_number_as_whatsapp_id(recipient.phone_number)
-        self.messenger.send_template(
+
+        response = self.messenger.send_template(
             template=template,
             recipient_id=user_number_id,
             lang=settings.WHATSAPP_LANG,
             components=components,
         )
+
+        error = response.get("error")
+        if error:
+            logging.getLogger(__name__).error(
+                f"Sending WhatsApp message failed: {error}"
+            )
 
     def send_welcome_message(self, user: CustomUser):
         """
