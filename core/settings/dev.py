@@ -73,4 +73,21 @@ WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
 
 client = logging.Client()
-client.setup_logging()
+handler = client.setup_logging()
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "gcp": {
+            "class": "google.cloud.logging.handlers.CloudLoggingHandler",
+            "client": client,
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["gcp"],
+            "level": "INFO",
+        },
+    },
+}
