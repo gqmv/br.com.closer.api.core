@@ -93,7 +93,7 @@ class TestGCPServicePermission:
 
         response = GCPServicePermission().validate_claims(claims, None)
 
-        assert response is not False # REMOVE
+        assert response is False
 
     def test_validate_claims_service_account_not_equal(self):
         claims = {"azp": "test-service-account"}
