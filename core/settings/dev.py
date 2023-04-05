@@ -11,7 +11,7 @@ from .base import *
 
 # Load the settings from the secret manager
 env = environ.Env()
-_, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+credentials, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
 
 project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
 client = secretmanager.SecretManagerServiceClient()
@@ -72,7 +72,7 @@ GS_DEFAULT_ACL = "publicRead"
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
 
-client = logging_v2.Client()
+client = logging_v2.Client(project=project_id, credentials=credentials)
 handler = client.setup_logging()
 
 LOGGING = {
