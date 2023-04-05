@@ -57,11 +57,11 @@ class GCPServicePermission(permissions.BasePermission):
         """
         This method is called by the DRF to check if the request has permission to access the endpoint.
         """
-        logging.get_logger(__name__).info("GCP Authenticated request received.")
+        logging.getLogger(__name__).info("GCP Authenticated request received.")
         result = self._has_permission(request, view)
 
         if not result:
-            logging.get_logger(__name__).error(
+            logging.getLogger(__name__).error(
                 "GCP Authenticated request failed to authenticate. This might be a security issue."
             )
 
