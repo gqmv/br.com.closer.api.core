@@ -1,7 +1,7 @@
 import io
 import os
 from urllib.parse import urlparse
-from google.cloud import secretmanager, logging
+from google.cloud import secretmanager, logging_v2
 import google.auth
 
 import environ
@@ -72,7 +72,7 @@ GS_DEFAULT_ACL = "publicRead"
 WHATSAPP_TOKEN = env("WHATSAPP_TOKEN")
 WHATSAPP_NUMBER_ID = env("WHATSAPP_NUMBER_ID")
 
-client = logging.Client()
+client = logging_v2.Client()
 handler = client.setup_logging()
 
 LOGGING = {
