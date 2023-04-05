@@ -1,14 +1,26 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    id: "build"
+    id: "Build"
     args: ["build", "-t", "${_IMAGE_NAME}", "."]
 
   - name: "gcr.io/cloud-builders/docker"
-    id: "push"
+    id: "Push"
     args: ["push",  "${_IMAGE_NAME}"]
 
   - name: "gcr.io/google-appengine/exec-wrapper"
-    id: "migrate"
+    id: "Unit Tests"
+    args:
+      [
+        "-i",
+        "gcr.io/$PROJECT_ID/${_SERVICE_NAME}",
+        "-s",
+        "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
+        "--",
+        "pytest -v",
+      ]
+
+  - name: "gcr.io/google-appengine/exec-wrapper"
+    id: "Migrate"
     args:
       [
         "-i",
@@ -24,7 +36,7 @@ steps:
       ]
 
   - name: "gcr.io/google-appengine/exec-wrapper"
-    id: "collectstatic"
+    id: "Collect Static"
     args:
       [
         "-i",
@@ -42,7 +54,7 @@ steps:
 
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    id: "deploy"
+    id: "Deploy"
     entrypoint: gcloud
     args:
       [
