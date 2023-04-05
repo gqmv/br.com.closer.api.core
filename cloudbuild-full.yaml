@@ -69,6 +69,7 @@ steps:
 
 options:
   dynamic_substitutions: true
+  logging: CLOUD_LOGGING_ONLY
 
 substitutions:
   _IMAGE_NAME: gcr.io/${PROJECT_ID}/${_SERVICE_NAME}
