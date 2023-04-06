@@ -18,6 +18,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
+# DJANGO SETTINGS
+
 INSTALLED_APPS = [
     # Django apps
     "django.contrib.admin",
@@ -121,9 +123,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "authentication.CustomUser"
 
+
+# DRF SETTINGS
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# CUSTOM SETTINGS
 
 WHATSAPP_LANG = "pt_BR"
 
