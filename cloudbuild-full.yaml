@@ -31,7 +31,7 @@ steps:
         "-e",
         "ENV=${_ENV}",
         "-e",
-        "CLOUDRUN_SERVICE_URL=${_CLOUDRUN_SERVICE_URL}"
+        "CLOUDRUN_SERVICE_URL=${_CLOUDRUN_SERVICE_URL}",
         "--",
         "python",
         "manage.py",
@@ -49,7 +49,7 @@ steps:
         "-e",
         "ENV=${_ENV}",
         "-e",
-        "CLOUDRUN_SERVICE_URL=${_CLOUDRUN_SERVICE_URL}"
+        "CLOUDRUN_SERVICE_URL=${_CLOUDRUN_SERVICE_URL}",
         "--",
         "python",
         "manage.py",
