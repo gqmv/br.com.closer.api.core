@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-
+from stores.models import WelcomeCampaign
 from .forms import UserRegistrationForm
 
 
@@ -17,4 +17,13 @@ def user_register(request, store_id: int = None):
     else:
         form = UserRegistrationForm()
 
-    return render(request, "registration.html", {"form": form})
+    #pelo store id pegar a campanha de boas vindas + a loja
+
+    welcome_campaign = WelcomeCampaign.objects.filter(store__id=store_id)
+
+    try:
+        welcome_campaign = welcome_campaign.get()
+    except WelcomeCampaign.DoesNotExist:
+        welcome_campaign = None
+    
+    return render(request, "registration.html", {"form": form, "welcome_campaign": welcome_campaign})
