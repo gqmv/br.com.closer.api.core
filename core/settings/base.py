@@ -136,15 +136,20 @@ REST_FRAMEWORK = {
 
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = (
-    "'unsafe-inline'",
+    "'self'",
+    "https://storage.googleapis.com",
     "https://cdn.jsdelivr.net",
 )
 CSP_STYLE_SRC = (
-    "'unsafe-inline'",
+    "'self'",
+    "https://storage.googleapis.com",
     "https://cdn.jsdelivr.net",
 )
 
-CSP_IMG_SRC = ("'self'", "https://storage.googleapis.com")
+CSP_IMG_SRC = (
+    "'self'",
+    "https://storage.googleapis.com",
+)
 
 # CUSTOM SETTINGS
 
