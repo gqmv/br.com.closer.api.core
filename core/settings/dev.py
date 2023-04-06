@@ -43,7 +43,8 @@ SECRET_KEY = env("SECRET_KEY")
 # SSL settings
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = True
-CSRF_USE_SESSIONS = False
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 # Security settings
 SESSION_COOKIE_SECURE = True
@@ -56,6 +57,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
 CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
 SESSION_COOKIE_DOMAIN = urlparse(CLOUDRUN_SERVICE_URL).netloc
+CSRF_USE_SESSIONS = False
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG", default=False)
