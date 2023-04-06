@@ -30,6 +30,8 @@ steps:
         "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
         "-e",
         "ENV=${_ENV}",
+        "-e",
+        "CLOUDRUN_SERVICE_URL=${_CLOUDRUN_SERVICE_URL}"
         "--",
         "python",
         "manage.py",
@@ -46,6 +48,8 @@ steps:
         "${PROJECT_ID}:${_REGION}:${_INSTANCE_NAME}",
         "-e",
         "ENV=${_ENV}",
+        "-e",
+        "CLOUDRUN_SERVICE_URL=${_CLOUDRUN_SERVICE_URL}"
         "--",
         "python",
         "manage.py",
