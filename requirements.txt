@@ -26,6 +26,6 @@ django-environ==0.4.5
 phonenumbers==8.12.34
 google-cloud-logging
 django-cryptography
-django-cryptography
 django-bootstrap5
 django-cpf-cnpj==1.0.0
+django-csp

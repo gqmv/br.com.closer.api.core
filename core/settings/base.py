@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "csp.middleware.CSPMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -129,6 +130,23 @@ AUTH_USER_MODEL = "authentication.CustomUser"
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+
+# DJANGO-CSP SETTINGS
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/",
+    "https://cdn.jsdelivr.net/npm/jquery@3.6.4/",
+    "https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/",
+)
+CSP_STYLE_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/",
+)
 
 # CUSTOM SETTINGS
 
