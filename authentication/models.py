@@ -111,7 +111,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.tax_id.__str__()
 
     def save(self, *args, **kwargs):
-        if not self.password:
-            self.set_unusable_password()
-
         super().save(*args, **kwargs)
