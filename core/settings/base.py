@@ -136,17 +136,15 @@ REST_FRAMEWORK = {
 
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = (
-    "'self'",
     "'unsafe-inline'",
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/",
-    "https://cdn.jsdelivr.net/npm/jquery@3.6.4/",
-    "https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/",
+    "https://cdn.jsdelivr.net",
 )
 CSP_STYLE_SRC = (
-    "'self'",
     "'unsafe-inline'",
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/",
+    "https://cdn.jsdelivr.net",
 )
+
+CSP_IMG_SRC = ("'self'", "https://storage.googleapis.com")
 
 # CUSTOM SETTINGS
 
