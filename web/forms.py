@@ -28,6 +28,7 @@ class UserRegistrationForm(ModelForm):
         If the optional parameter store_id is passed, a welcome message is sent to the user.
         """
         user = super().save(commit)
+        user.set_unusable_password()
         store = Store.objects.filter(id=store_id)
 
         whatsapp_service = WhatsAppService()

@@ -1,5 +1,7 @@
 import pytest
 
+from django.contrib.auth import authenticate
+
 from web.forms import UserRegistrationForm
 from .factories import UserRegistrationFormDataFactory
 from tests.stores.factories import WelcomeCampaignFactory
@@ -27,6 +29,8 @@ class TestUserRegistrationForm:
         assert user.phone_number == form_data["phone_number"]
         assert user.first_name == form_data["first_name"]
 
+        assert None == authenticate(tax_id=form_data["tax_id"], password=None)
+
     def test_success_referral_store(self, mocker):
         store = WelcomeCampaignFactory.create().store
 
@@ -43,3 +47,5 @@ class TestUserRegistrationForm:
         user = form.save(store_id=store.id)
 
         mock_welcome_message.assert_called_once_with(user)
+        
+        assert None == authenticate(tax_id=form_data["tax_id"], password=None)
