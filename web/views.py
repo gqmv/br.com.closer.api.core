@@ -18,3 +18,9 @@ def user_register(request, store_id: int = None):
         form = UserRegistrationForm()
 
     return render(request, "registration.html", {"form": form})
+
+def landing_page(request):
+    """
+    View that shows the landing page
+    """
+    return render(request, "landing.html")
