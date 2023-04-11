@@ -7,10 +7,11 @@ from .services import WhatsAppService
 from .serializers import PurchaseSerializer
 from .utils import select_relevant_campaign_user_list
 from authentication.models import CustomUser
+from core.permissions import GCPServicePermission
 
 
 class RegisterPurchase(APIView):
-    """_summary_
+    """
     Endpoint for registering a new purchase.
     """
 
@@ -30,11 +31,14 @@ class PeriodicNotificationView(APIView):
     Endpoint for sending a periodic notification to users.
     """
 
-    def post(self, request, format=None):
+    permission_classes = [GCPServicePermission]
+
+    def post(self, request=None, format=None):
         users = CustomUser.objects.all()
         whatsapp_service = WhatsAppService()
         for user in users:
             campaign_user_list = select_relevant_campaign_user_list(user)
-            whatsapp_service.send_periodic_message(*campaign_user_list)
+            if len(campaign_user_list) > 0:
+                whatsapp_service.send_periodic_message(*campaign_user_list)
 
         return Response(status=status.HTTP_200_OK)

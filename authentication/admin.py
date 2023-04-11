@@ -9,7 +9,7 @@ class CustomUserAdminConfig(admin.ModelAdmin):
     search_fields = ("first_name",  "tax_id",  "phone_number")
     
     fieldsets = (
-        (None, {"fields": ("first_name", "tax_id",  "phone_number")}),
+        (None, {"fields": ("first_name", "tax_id",  "phone_number", "password")}),
         ("Permissions", {"fields": ("is_staff", "is_superuser")}),
     )
     

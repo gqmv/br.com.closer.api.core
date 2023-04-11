@@ -1,9 +1,17 @@
 from rest_framework import serializers
-from cpf_field.models import CPFField
 
-from .utils import update_campaign_user_progress
+from .utils import update_campaign_user_progress, handle_campaign_user_rewards
 from stores.models import Store, RegularCampaign, CampaignUser
 from authentication.models import CustomUser
+
+
+def get_valid_campaigns_from_item_id(
+    item_id: str, store: Store
+) -> list[RegularCampaign]:
+    """
+    Returns a iterable of valid campaigns for a given item id.
+    """
+    return RegularCampaign.objects.filter(item_id=item_id, store=store)
 
 
 class PurchaseSerializer(serializers.Serializer):
@@ -27,18 +35,20 @@ class PurchaseSerializer(serializers.Serializer):
         user = self.validated_data.get("user")
         store = self.validated_data.get("store")
 
-        campaigns = RegularCampaign.objects.filter(
-            store=store, item_id=self.validated_data.get("item_id")
+        campaigns = get_valid_campaigns_from_item_id(
+            self.validated_data.get("item_id"), store
         )
 
         for campaign in campaigns:
-            try:
-                campaign_user = CampaignUser.objects.get(campaign=campaign, user=user)
-            except CampaignUser.DoesNotExist:
-                campaign_user = CampaignUser.objects.create(
-                    campaign=campaign, user=user
-                )
+            campaign_user = CampaignUser.objects.get_or_create(
+                campaign=campaign, user=user
+            )[
+                0
+            ]  # get_or_create returns a tuple with the object and a boolean indicating if it was created or not.
 
-            update_campaign_user_progress(
+            campaign_user = update_campaign_user_progress(
                 campaign_user, self.validated_data.get("item_qty")
             )
+
+            if campaign_user.progress >= campaign.item_qty:
+                handle_campaign_user_rewards(campaign_user)

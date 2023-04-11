@@ -1,5 +1,7 @@
 import os
 from heyoo import WhatsApp
+from django.conf import settings
+import logging
 
 from authentication.models import CustomUser
 from stores.models import CampaignUser, Store, BaseCampaign, RegularCampaign
@@ -59,11 +61,16 @@ class ComponentsBuilder:
         return self.components
 
 
+def get_phone_number_as_whatsapp_id(phone_number: str) -> str:
+    """
+    Returns the phone number as a WhatsApp ID.
+    """
+    return str(phone_number).replace("+", "")
+
+
 class WhatsAppService:
     def __init__(self):
-        self.messenger = WhatsApp(
-            os.environ.get("WHATSAPP_TOKEN"), os.environ.get("WHATSAPP_NUMBER_ID")
-        )
+        self.messenger = WhatsApp(settings.WHATSAPP_TOKEN, settings.WHATSAPP_NUMBER_ID)
 
     def send_template(
         self, template: str, recipient: CustomUser, components: list[dict]
@@ -71,13 +78,20 @@ class WhatsAppService:
         """
         Sends a template message to the user.
         """
-        user_number_id = str(recipient.phone_number).replace("+", "")
-        self.messenger.send_template(
+        user_number_id = get_phone_number_as_whatsapp_id(recipient.phone_number)
+
+        response = self.messenger.send_template(
             template=template,
             recipient_id=user_number_id,
-            lang=os.environ.get("WHATSAPP_LANG"),
+            lang=settings.WHATSAPP_LANG,
             components=components,
         )
+
+        error = response.get("error")
+        if error:
+            logging.getLogger(__name__).error(
+                f"Sending WhatsApp message failed: {error}"
+            )
 
     def send_welcome_message(self, user: CustomUser):
         """
@@ -89,7 +103,7 @@ class WhatsAppService:
         components = componentsBuilder.build()
 
         self.send_template(
-            template="welcome_message",
+            template="user_welcome_message",
             recipient=user,
             components=components,
         )
@@ -112,7 +126,7 @@ class WhatsAppService:
             components=components,
         )
 
-    def send_periodic_message(self, *campaign_user_list: CampaignUser):
+    def send_periodic_message(self, campaign_user_list: list[CampaignUser]):
         """
         Sends a periodic message to the user with the information about the campaigns passed as arguments.
         """

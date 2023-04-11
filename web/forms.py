@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from api.services import WhatsAppService
 from authentication.models import CustomUser
@@ -13,8 +14,8 @@ class UserRegistrationForm(ModelForm):
 
     accept_terms = forms.BooleanField(
         required=True,
-        label="I accept the terms of use",
-        error_messages={"required": "You must accept the terms of use to register."},
+        label=_("I accept the terms of use."),
+        error_messages={"required": _("You must accept the terms of use to register.")},
     )
 
     class Meta:
@@ -27,12 +28,13 @@ class UserRegistrationForm(ModelForm):
         If the optional parameter store_id is passed, a welcome message is sent to the user.
         """
         user = super().save(commit)
+        user.set_unusable_password()
         store = Store.objects.filter(id=store_id)
 
-        if store.exists():
-            store = store.get()
+        whatsapp_service = WhatsAppService()
+        whatsapp_service.send_welcome_message(user)
 
-            whatsapp_service = WhatsAppService()
-            whatsapp_service.send_welcome_message(user, store)
+        if store.exists():
+            pass
 
         return user
