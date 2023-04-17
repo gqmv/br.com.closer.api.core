@@ -10,11 +10,6 @@
         <title>{% block title %} {% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
-        {% block head %} {% endblock %}
-        {% block css %} {% endblock %}
-        {% block js %} {% endblock %}
-    </head>
-    <body>
         {% block navbar %}
         <nav class="navbar border-bottom rounded-bottom">
             <div class="col-4 col-md-2 col-lg-1">
@@ -22,10 +17,12 @@
             </div>
         </nav>
         {% endblock %}
-
-        <div class="container">
+        {% block head %} {% endblock %}
+        {% block css %} {% endblock %}
+        {% block js %} {% endblock %}
+    </head>
+    <body>
             {% block content %} {% endblock %}
-        </div>
     </body>
 
 </html>

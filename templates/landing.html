@@ -1,3 +1,162 @@
 {% extends "base.html" %}
 {% load static%}
 {% load django_bootstrap5 %}
+
+{% block title %}
+Closer
+{% endblock %}
+
+{% block head%}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+{% endblock %}
+
+{%block css%}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{%endblock%}
+
+{# navbar class #}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg border-bottom rounded-bottom">
+    <div class="container">
+        <div class="col-4 col-md-2 col-lg-1">
+            <img src="{% static 'logos/logo_gradient_transparent.png' %}" class="img-fluid"/>
+        </div>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navmenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="#como_funcionamos" class="nav-link text-dark">Como funcionamos</a>
+            </li>
+            <li class="nav-item">
+              <a href="#sobre" class="nav-link text-dark">Sobre</a>
+            </li>
+            <li class="nav-item">
+                <a href="#contato" class="nav-link text-dark">Contato</a>
+              </li>
+          </ul>
+        </div>
+      </div>
+</nav>
+{%endblock%}
+
+{%block content%}
+
+{# introduction/register link class #}
+
+<section href="intro" class="bg-warning text-light p-5 text-center"
+    >
+      <div class="container">
+        <div class="align-items-center justify-content-between">
+          <div>
+            <h1>Seja bem-vindo à<span class="text-dark"> Closer</span>!</h1>
+            <p class="lead my-3">
+              Te aproximamos dos melhores estabelecimentos de maneira ágil e personalizada
+            </p>
+            <button
+              class="btn btn-primary btn-lg"
+              data-bs-toggle="modal"
+              data-bs-target="#enroll"
+            >
+              Cadastre-se agora
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+{# como funcionamos class #}
+
+<section class="p-5">
+    <div class="container">
+        <div class="row text-center g-4">
+        <div class="col-md">
+            <div class="card bg-warning text-light h-100">
+            <div class="card-body text-center">
+                <div class="h1 mb-3">
+                <i class="bi bi-shop"></i>
+                </div>
+                <h3 class="card-title mb-3">Ache uma loja parceira</h3>
+                <p class="card-text">
+                Vá na sua loja preferida e verifique se ela é nossa parceira. Caso não seja, nos recomende!
+                </p>
+            </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card bg-secondary text-light h-100">
+            <div class="card-body text-center">
+                <div class="h1 mb-3">
+                <i class="bi bi-phone"></i>
+                </div>
+                <h3 class="card-title mb-3">Cadastre-se</h3>
+                <p class="card-text">
+                Faça um cadastro simples no nosso site.
+                </p>
+            </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card bg-dark text-light h-100">
+            <div class="card-body text-center">
+                <div class="h1 mb-3">
+                <i class="bi bi-cart-check-fill"></i>
+                </div>
+                <h3 class="card-title mb-3">Consuma e ganhe</h3>
+                <p class="card-text">
+                Pronto. Você já está sendo atualizado em tempo real de todas as suas campanhas.
+                </p>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+{# sobre nós class #}
+
+<section id="sobre" class="p-5">
+<div class="container">
+    <div class="row align-items-center justify-content-between">
+    <div class="col-md">
+        <img src="ilustracao arbitraria" class="img-fluid" alt="" />
+    </div>
+    <div class="col-md p-5">
+        <h2>Sobre a Closer</h2>
+        <p class="lead">
+        Somos umas startup com o objetivo de facilitar a sua vida unificando todos os seus programas de fidelidade
+        </p>
+        <p>
+        Somos uma equipe de alunos do CIn-UFPE e estamos tentando resolver um problema que nós identificamos na nossa própria vida.
+        Sempre víamos aqueles cartões fidelidade, mas ninguém nunca nos oferecia ou explicava como funcionava. Portanto, resolvemos criar a Closer.
+         Um programa que une todos os seus "cartões" da maneira mais simples possível. 
+        Por enquanto estamos em fase de teste na melhor cafeteria de Recife: a #####
+        </p>
+    </div>
+    </div>
+</div>
+</section>
+
+<section id="contato" class="p-5 bg-warning">
+    <div class="container">
+        <div class="col-md p-5 align-items-center">
+            <h2>Contato</h2>
+            <p class="lead">
+            Quer nos ajudar a te ajudar? Entre em contato conosco e teste nosso programa na sua empresa.
+            </p>
+            <p>
+            contato@closer.app.br
+            </p>
+        </div>
+    </div>
+    </section>
+
+{%endblock%}
