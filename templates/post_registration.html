@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static%}
+{% load django_bootstrap5 %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/post_registration.css' %}">
+<link rel="stylesheet" href="{% static 'css/utils.css' %}">
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+
+<script src="{% static 'js/masks.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="spacing"></div>
+    <div class="text-center">
+      <h1 class="title">
+        Estamos muito felizes por ter você aqui, {{user_first_name}}!
+      </h1>
+      <p class="closer-slogan">
+        A <b>Closer</b> te aproxima das suas lojas favoritas através do nosso sistema digital de cartões de fidelidade.
+      </p>
+      <br />
+      {% if welcome_campaign %}
+      <p class="lead">
+        A loja <b>{{welcome_campaign.store.name}}</b> te dá boas-vindas com <b>{{welcome_campaign.reward_name}}.</b><br />
+        O que você está esperando, vá no whatsapp e garanta sua recompensa!
+      </p>
+      {% else %}
+      <p class="lead">
+        Conheça nossas lojas parceiras e já comece ganhando!
+      </p>
+      {% endif %}
+      <a href="{% url 'landing-page'}" class="btn btn-primary button-custom fw-bold border-0 my-2 col-12 col-md-4">Sobre a Closer</a>
+      <a href="{% url 'register' %}" class="btn btn-primary button-custom fw-bold border-0 my-2 col-12 col-md-4">Empresas parceiras</a>
+    </div>
+  </div>
+{% endblock %}

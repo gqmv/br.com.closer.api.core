@@ -1,0 +1,25 @@
+.text-center {
+    text-align: center;
+}
+
+.closer-slogan {
+    margin-bottom: 16px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.lead {
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+.spacing{
+    margin-bottom: 120px;
+}
+.title {
+    margin-bottom: 20px;
+}
+
+.lead {
+    margin-top: 32px;
+}
