@@ -23,6 +23,8 @@ class TestCustomUserModelManager:
         assert mock.items() <= user.__dict__.items()
         assert user.password != PASSWORD
 
+        assert user == authenticate(tax_id=mock["tax_id"], password=PASSWORD)
+
     def test__create_user_no_tax_id(self):
         mock = MOCK_USER_DATA.copy()
         mock["tax_id"] = None

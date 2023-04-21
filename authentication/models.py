@@ -36,6 +36,11 @@ class CustomUserManager(BaseUserManager):
             **extra_fields
         )
 
+        if password:
+            user.password = make_password(password)
+        else:
+            user.set_unusable_password()
+
         user.save(using=self._db)
         return user
 
@@ -109,6 +114,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.tax_id.__str__()
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)

@@ -56,3 +56,9 @@ def post_register(request, user_first_name: str, store_id: int = None):
         welcome_campaign = None
     
     return render(request, "post_registration.html", {"user_first_name": user_first_name, "welcome_campaign": welcome_campaign})
+
+def landing_page(request):
+    """
+    View that shows the landing page
+    """
+    return render(request, "landing.html")
