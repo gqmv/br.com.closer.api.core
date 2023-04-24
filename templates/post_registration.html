@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
   <div class="row">
     <div class="spacing"></div>
     <div class="text-center">
@@ -26,7 +27,8 @@
       <br />
       {% if welcome_campaign %}
       <p class="lead">
-        A loja <b>{{welcome_campaign.store.name}}</b> te dá boas-vindas com <b>{{welcome_campaign.reward_name}}.</b><br />
+        A loja <b>{{welcome_campaign.store.name}}</b> te dá boas-vindas com
+        <b>{{welcome_campaign.reward_name}}.</b><br />
         Sua recompensa estará no seu Whatsapp em instantes!
       </p>
       {% else %}
@@ -34,8 +36,11 @@
         Conheça nossas lojas parceiras e já comece ganhando!
       </p>
       {% endif %}
-      <a href="{% url 'landing-page' %}" class="btn btn-primary button-custom fw-bold border-0 my-2 col-12 col-md-4">Sobre a Closer</a>
-      <a href="{% url 'register' %}" class="btn btn-primary button-custom fw-bold border-0 my-2 col-12 col-md-4">Empresas parceiras</a>
+      <a href="{% url 'landing-page' %}"
+        class="btn btn-primary button-custom fw-bold border-0 my-2 col-12 col-md-4">Sobre a Closer</a>
+      <a href="{% url 'register' %}"
+        class="btn btn-primary button-custom fw-bold border-0 my-2 col-12 col-md-4">Empresas parceiras</a>
     </div>
   </div>
+</div>
 {% endblock %}

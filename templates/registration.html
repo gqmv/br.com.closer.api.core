@@ -13,48 +13,50 @@
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center m-2">
-  <div class="">
-    {% if welcome_campaign %}
-    <h1>
-      Seja bem vindo à Closer!
-    </h1>
-    <p>
-      Trazemos as melhores empresas de maneira ágil e personlizada para junto de você.
-    </p>
-    <p>
-      <b>{{ welcome_campaign.store.name }}</b> é uma de muitas empresas que estão no ecossitema Closer.<br />
-      Complete seu cadastro 
-      <!-- para participar da promoção <b>{{ welcome_campaign.name }}</b>  -->
-      para ganhar
-      <b>{{welcome_campaign.reward_name }}</b>!
-    </p>
-    {% else %}
-    <h1>
-      Seja bem vindo à Closer!
-    </h1>
-    <p>
-      Trazemos as melhores empresas de maneira ágil e personlizada para junto de você.
-    </p>
-    <p>
-      Cadastre-se rapidinho e já faça parte da nova experiência com sistemas de fidelidade!
-    <p>
-    {% endif %}
-  </div>
-  <form action="" method="post">
-    <div class="row">
-      {% csrf_token %}
-      {% bootstrap_form_errors form type="non-fields" %}
-
-
-      {% bootstrap_field form.tax_id layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
-      {% bootstrap_field form.phone_number layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
-      {% bootstrap_field form.first_name layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
-      {% bootstrap_field form.accept_terms layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
-
-
-      {% bootstrap_button "Finalizar" button_type="submit" extra_classes="button-custom fw-bold border-0" %}
+<div class="container">
+  <div class="row justify-content-center m-2">
+    <div class="">
+      {% if welcome_campaign %}
+      <h1>
+        Seja bem vindo à Closer!
+      </h1>
+      <p>
+        Trazemos as melhores empresas de maneira ágil e personlizada para junto de você.
+      </p>
+      <p>
+        <b>{{ welcome_campaign.store.name }}</b> é uma de muitas empresas que estão no ecossitema Closer.<br />
+        Complete seu cadastro
+        <!-- para participar da promoção <b>{{ welcome_campaign.name }}</b>  -->
+        para ganhar
+        <b>{{welcome_campaign.reward_name }}</b>!
+      </p>
+      {% else %}
+      <h1>
+        Seja bem vindo à Closer!
+      </h1>
+      <p>
+        Trazemos as melhores empresas de maneira ágil e personlizada para junto de você.
+      </p>
+      <p>
+        Cadastre-se rapidinho e já faça parte da nova experiência com sistemas de fidelidade!
+      <p>
+        {% endif %}
     </div>
-  </form>
+    <form action="" method="post">
+      <div class="row">
+        {% csrf_token %}
+        {% bootstrap_form_errors form type="non-fields" %}
+
+
+        {% bootstrap_field form.tax_id layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+        {% bootstrap_field form.phone_number layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+        {% bootstrap_field form.first_name layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+        {% bootstrap_field form.accept_terms layout="floating" label_class="text-secondary ms-2 fw-semibold" %}
+
+
+        {% bootstrap_button "Finalizar" button_type="submit" extra_classes="button-custom fw-bold border-0" %}
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
