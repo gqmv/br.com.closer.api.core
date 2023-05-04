@@ -2,10 +2,10 @@ import pytest
 from django.test import Client
 from django.urls import reverse
 from http import HTTPStatus
-
+from bs4 import BeautifulSoup
 from authentication.models import CustomUser
 from .factories import UserRegistrationFormDataFactory
-
+from tests.stores.factories import WelcomeCampaignFactory, StoreFactory
 from web.forms import UserRegistrationForm
 
 
@@ -51,7 +51,6 @@ class TestUserPostRegisterView:
     client = Client()
     urls = ["register", "register-affiliated-store", "post-register", "post-register-affiliated-store"]
     kwargs = {"user_first_name": "Jonh"}
-    store_id = 2
 
     def test_success_redirect(self):
         form_data = UserRegistrationFormDataFactory.build()
@@ -63,13 +62,15 @@ class TestUserPostRegisterView:
         assert response.status_code == HTTPStatus.FOUND
         assert response.has_header("Location")
         assert response["Location"] == reverse(self.urls[2], kwargs=self.kwargs)
+        
 
     def test_success_redirect_affiliated_store(self):
+        store = WelcomeCampaignFactory.create().store
         form_data = UserRegistrationFormDataFactory.build()
         self.kwargs["user_first_name"] = form_data["first_name"]
-        self.kwargs["store_id"] = self.store_id
+        self.kwargs["store_id"] = store.id
 
-        url = reverse(self.urls[1], kwargs={"store_id": self.store_id})
+        url = reverse(self.urls[1], kwargs={"store_id": store.id})
         response = self.client.post(url, data=form_data)
 
         assert response.status_code == HTTPStatus.FOUND
@@ -83,10 +84,46 @@ class TestUserPostRegisterView:
         assert response.status_code == HTTPStatus.OK
         assert response.templates[0].name == "post_registration.html"
 
+        soup = BeautifulSoup(response.content, "html.parser")
+        store_name = soup.select_one(".store-name")
+        assert store_name is None
+        
+
     def test_get_affiliated_store(self):
-        self.kwargs["store_id"] = self.store_id
+        store = WelcomeCampaignFactory.create().store
+        self.kwargs["store_id"] = store.id
         url = reverse(self.urls[3], kwargs=self.kwargs)
 
         response = self.client.get(url)
         assert response.status_code == HTTPStatus.OK
         assert response.templates[0].name == "post_registration.html"
+
+        soup = BeautifulSoup(response.content, "html.parser")
+        store_name = soup.select_one(".store-name")
+        assert store_name.text == store.name
+
+    def test_get_null_store(self):
+        self.kwargs["store_id"] = 0
+        url = reverse(self.urls[3], kwargs=self.kwargs)
+
+        response = self.client.get(url)
+        assert response.status_code == HTTPStatus.OK
+        assert response.templates[0].name == "post_registration.html"
+
+        soup = BeautifulSoup(response.content, "html.parser")
+        store_name = soup.select_one(".store-name")
+        assert store_name is None
+
+    def test_get_null_welcome_campaign(self):
+        store = StoreFactory()
+        self.kwargs["store_id"] = store.id
+        url = reverse(self.urls[3], kwargs=self.kwargs)
+
+        response = self.client.get(url)
+        assert response.status_code == HTTPStatus.OK
+        assert response.templates[0].name == "post_registration.html"
+
+        soup = BeautifulSoup(response.content, "html.parser")
+        store_name = soup.select_one(".store-name")
+        assert store_name is None
+        
